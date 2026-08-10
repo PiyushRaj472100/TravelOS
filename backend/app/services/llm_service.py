@@ -1,11 +1,5 @@
-import importlib
-
-try:
-    genai = importlib.import_module("google.genai")
-    types = importlib.import_module("google.genai.types")
-except ModuleNotFoundError:
-    genai = importlib.import_module("genai")
-    types = importlib.import_module("genai.types")
+from google import genai
+from google.genai import types
 
 from app.config import GEMINI_API_KEY
 from app.models.travel_extraction import TravelExtraction
@@ -19,10 +13,13 @@ class LLMService:
             raise ValueError("GEMINI_API_KEY is not configured.")
 
         self.client = genai.Client(
-            api_key=GEMINI_API_KEY
+            api_key=GEMINI_API_KEY,
+            http_options=types.HttpOptions(
+                timeout=30000
+            )
         )
 
-        self.model = "gemini-3.5-flash-lite"
+        self.model = "gemini-3.1-flash-lite"
 
     def extract_travel_information(
         self,
@@ -61,10 +58,11 @@ User message:
         response = self.client.models.generate_content(
             model=self.model,
             contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=TravelExtraction,
-            ),
+            config={
+                "response_mime_type": "application/json",
+                "response_json_schema":
+                    TravelExtraction.model_json_schema(),
+            },
         )
 
         return TravelExtraction.model_validate_json(

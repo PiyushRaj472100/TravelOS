@@ -1,1 +1,0 @@
-"""Maps integration service."""

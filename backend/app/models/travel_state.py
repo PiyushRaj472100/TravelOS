@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field
+from app.models.geo import GeoLocation , TravelLeg, TravelRoute, RoutePoint
 
 
 class TravelState(BaseModel):
@@ -51,3 +52,8 @@ class TravelState(BaseModel):
     current_day: Optional[int] = None
     selected_location: Optional[Dict[str, Any]] = None
     selected_route: Optional[Dict[str, Any]] = None
+    
+    
+    locations: list[GeoLocation] = []
+    route: list[GeoLocation] = []
+    travel_legs: list[TravelLeg] = []

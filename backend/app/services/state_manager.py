@@ -1,6 +1,7 @@
 from app.models.travel_state import TravelState
 from app.models.travel_extraction import TravelExtraction
-
+from app.services.geo_service import GeoService
+from app.services.route_service import RouteService
 
 class StateManager:
 
@@ -9,6 +10,9 @@ class StateManager:
         state: TravelState,
         extraction: TravelExtraction
     ) -> TravelState:
+        
+        
+        
 
         # Simple fields
         if extraction.origin is not None:
@@ -62,6 +66,20 @@ class StateManager:
                     state.interests + extraction.interests
                 )
             )
+            
+        for destination in extraction.destinations:   
+            location = GeoService.find_location(destination)
+            if location:
+                    already_exists = any(
+                        existing.name.lower()== location.name.lower() for existing in state.locations
+                    )  
+                    if not already_exists:
+                        state.locations.append(location)
+                        
+        # Build ordered route
+        if state.locations:
+            state.route = RouteService.build_route(state.locations)
+            state.travel_legs = RouteService.build_legs(state.route)                
 
         if extraction.food_preferences:
             state.food_preferences = list(

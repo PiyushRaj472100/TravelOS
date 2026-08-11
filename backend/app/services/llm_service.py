@@ -10,7 +10,9 @@ class LLMService:
     def __init__(self):
 
         if not GEMINI_API_KEY:
-            raise ValueError("GEMINI_API_KEY is not configured.")
+            raise ValueError(
+                "GEMINI_API_KEY is not configured."
+            )
 
         self.client = genai.Client(
             api_key=GEMINI_API_KEY,
@@ -68,3 +70,15 @@ User message:
         return TravelExtraction.model_validate_json(
             response.text
         )
+
+    def generate_response(
+        self,
+        prompt: str
+    ) -> str:
+
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=prompt
+        )
+
+        return response.text

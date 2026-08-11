@@ -161,8 +161,14 @@ class RAGRetriever:
 
                 unique_results.append(result)
 
-        # -------------------------------------------------
+       
         # Return only the requested number of results
-        # -------------------------------------------------
-
+        
+        unique_results.sort(    # global ranking by score
+            key=lambda result: result["score"],
+            reverse=True
+        )
+        
+        
+        
         return unique_results[:top_k]

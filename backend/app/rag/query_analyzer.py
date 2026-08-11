@@ -6,7 +6,10 @@ from app.rag.query import RAGQuery
 
 class QueryAnalyzer:
 
-    def __init__(self, llm_service: LLMService):
+    def __init__(
+        self,
+        llm_service: LLMService
+    ):
 
         self.llm_service = llm_service
 
@@ -19,11 +22,98 @@ class QueryAnalyzer:
 You are the query analysis component of a global
 AI travel planning system.
 
-Analyze the user's question.
+Analyze the user's question and determine:
 
-Determine the most appropriate category.
+1. What the user is trying to do.
+2. The most appropriate travel category.
+3. Whether live/current information is required.
+4. Any explicitly mentioned countries, regions,
+   or cities.
 
-Allowed categories:
+
+# QUERY TYPE
+=============
+
+Determine the user's intent.
+
+Use:
+
+query_type = "planning"
+
+when the user is providing trip information,
+requesting trip planning, or continuing a
+travel-planning conversation.
+
+Examples:
+
+"I want to visit Japan for 10 days."
+→ planning
+
+"I am going to Paris next month."
+→ planning
+
+"I have a budget of 2000 euros."
+→ planning
+
+"I want a relaxing trip to Italy."
+→ planning
+
+"I will travel with my family."
+→ planning
+
+
+Use:
+
+query_type = "knowledge"
+
+when the user is asking for travel knowledge,
+facts, explanations, recommendations, or
+guidance that should be answered using the
+travel knowledge base.
+
+Examples:
+
+"What should I know about Japanese culture?"
+→ knowledge
+
+"What should I know about Paris?"
+→ knowledge
+
+"What should I pack for Japan?"
+→ knowledge
+
+"How does public transportation work in Italy?"
+→ knowledge
+
+"What are the entry requirements?"
+→ knowledge
+
+"What are Japanese customs?"
+→ knowledge
+
+
+IMPORTANT:
+
+A simple statement about the user's trip is
+PLANNING, not knowledge retrieval.
+
+For example:
+
+"I want to visit Japan for 10 days."
+
+must produce:
+
+query_type = "planning"
+
+NOT:
+
+query_type = "knowledge"
+
+
+# ALLOWED CATEGORIES
+=====================
+
+Use only one of these categories:
 
 - entry_requirements
 - visa
@@ -40,29 +130,200 @@ Allowed categories:
 - destination_information
 - general
 
-Also determine whether the question requires
-current or live information.
 
-Use:
+# LIVE DATA RULE
+=================
+
+Set:
 
 needs_live_data = true
 
-for information that can change over time, such as:
+ONLY when the user explicitly asks for
+CURRENT or LIVE information.
+
+Examples:
+
+"What is the weather in Tokyo tomorrow?"
+→ true
+
+"What is the current exchange rate from INR to EUR?"
+→ true
+
+"What are the current visa requirements for Japan?"
+→ true
+
+"Are flights available tomorrow?"
+→ true
+
+"What are the current hotel prices?"
+→ true
+
+"What are the transportation schedules today?"
+→ true
+
+
+Set:
+
+needs_live_data = false
+
+when the user asks for general, educational,
+or stable travel knowledge.
+
+Examples:
+
+"What are the entry requirements?"
+→ false
+
+"What should I know about Japanese culture?"
+→ false
+
+"How does public transportation work in Japan?"
+→ false
+
+"What should I pack for Japan?"
+→ false
+
+"What are Japanese customs?"
+→ false
+
+
+IMPORTANT:
+
+Do NOT mark a question as live merely because
+the information could change over time.
+
+For example:
+
+"What are the entry requirements?"
+→ false
+
+"What are the current entry requirements?"
+→ true
+
+
+# DESTINATION EXTRACTION
+=========================
+
+Extract countries, regions, and cities ONLY when
+they are explicitly mentioned in the question.
+
+Do NOT guess destinations.
+
+Do NOT infer a destination from general knowledge.
+
+Examples:
+
+"I want to visit Japan."
+→ countries: ["Japan"]
+
+"What should I know about Tokyo?"
+→ cities: ["Tokyo"]
+
+"Tell me about Kansai."
+→ regions: ["Kansai"]
+
+"What is the weather in Tokyo?"
+→ cities: ["Tokyo"]
+
+
+# CATEGORY RULES
+=================
+
+Use "currency" for questions about:
 
 - exchange rates
-- weather
-- flight availability
-- hotel prices
-- current travel rules
-- current visa requirements
-- current transportation schedules
+- currency conversion
+- money conversion
 
-Do NOT invent destinations.
+Use "weather" for:
 
-Only extract destinations explicitly mentioned
-in the user's question.
+- current weather
+- weather forecasts
+- tomorrow's weather
+
+Use "entry_requirements" for general questions
+about entering a country.
+
+Use "visa" for visa-related questions.
+
+Use "transportation" for general transportation
+knowledge.
+
+Use "accommodation" for hotels and lodging.
+
+Use "culture" for cultural customs and traditions.
+
+Use "packing" for packing recommendations.
+
+Use "safety" for general travel safety.
+
+Use "destination_information" for general
+destination knowledge.
+
+Use "general" when no other category is appropriate.
+
+
+# IMPORTANT INTERACTION RULE
+=============================
+
+The query_type determines the user's primary intent.
+
+If the user is giving information about their own
+trip, use:
+
+query_type = "planning"
+
+even if the message contains a destination,
+duration, budget, travelers, or other trip details.
+
+Examples:
+
+"I want to visit Japan for 10 days."
+→ query_type = "planning"
+
+"My budget is 2000 euros."
+→ query_type = "planning"
+
+"I am traveling to France with my family."
+→ query_type = "planning"
+
+"I prefer hotels."
+→ query_type = "planning"
+
+
+If the user asks a knowledge question, use:
+
+query_type = "knowledge"
+
+Examples:
+
+"What are Japanese customs?"
+→ query_type = "knowledge"
+
+"What should I pack for Japan?"
+→ query_type = "knowledge"
+
+"What are the entry requirements?"
+→ query_type = "knowledge"
+
+
+If the user explicitly asks for current/live
+information:
+
+needs_live_data = true
+
+This takes priority for routing to the live
+information system.
+
+
+# OUTPUT
+=========
 
 Return ONLY valid JSON.
+
+Do not include markdown.
+
+Do not include explanations.
 
 User question:
 
@@ -76,7 +337,8 @@ JSON format:
     "countries": [],
     "regions": [],
     "cities": [],
-    "needs_live_data": false
+    "needs_live_data": false,
+    "query_type": "planning"
 }}
 """
 
@@ -86,4 +348,6 @@ JSON format:
 
         data = json.loads(response)
 
-        return RAGQuery.model_validate(data)
+        return RAGQuery.model_validate(
+            data
+        )

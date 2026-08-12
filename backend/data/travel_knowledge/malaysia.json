@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "malaysia-culture-001",
+    "title": "Malaysia Culture",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=Malaysia+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "malaysia-transportation-001",
+    "title": "Malaysia Transportation",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=Malaysia+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "malaysia-packing-001",
+    "title": "Malaysia Packing",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=Malaysia+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "malaysia-safety-001",
+    "title": "Malaysia Safety",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=Malaysia+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "malaysia-destination_information-001",
+    "title": "Malaysia Destination Information",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=Malaysia+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "malaysia-entry_requirements-001",
+    "title": "Malaysia Entry Requirements",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=Malaysia+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "malaysia-visa-001",
+    "title": "Malaysia Visa",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.imi.gov.my+Malaysia+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=Malaysia+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "malaysia-activities-001",
+    "title": "Malaysia Activities",
+    "country": "Malaysia",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Malaysia covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in Malaysia?",
+    "official_source_portals": [
+      {
+        "name": "Malaysia official tourism information",
+        "url": "https://www.malaysia.travel/"
+      },
+      {
+        "name": "Malaysia official government information",
+        "url": "https://www.imi.gov.my/"
+      }
+    ],
+    "category_source": {
+      "name": "Malaysia Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.malaysia.travel+Malaysia+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Malaysia things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=Malaysia+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

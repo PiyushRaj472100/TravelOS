@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "china-culture-001",
+    "title": "China Culture",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=China+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "china-transportation-001",
+    "title": "China Transportation",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=China+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "china-packing-001",
+    "title": "China Packing",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=China+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "china-safety-001",
+    "title": "China Safety",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=China+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "china-destination_information-001",
+    "title": "China Destination Information",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=China+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "china-entry_requirements-001",
+    "title": "China Entry Requirements",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=China+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "china-visa-001",
+    "title": "China Visa",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mfa.gov.cn+China+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=China+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "china-activities-001",
+    "title": "China Activities",
+    "country": "China",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for China covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in China?",
+    "official_source_portals": [
+      {
+        "name": "China official tourism information",
+        "url": "https://www.travelchina.org.cn/"
+      },
+      {
+        "name": "China official government information",
+        "url": "https://www.mfa.gov.cn/eng/"
+      }
+    ],
+    "category_source": {
+      "name": "China Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.travelchina.org.cn+China+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "China things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=China+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

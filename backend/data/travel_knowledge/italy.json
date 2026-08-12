@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "italy-culture-001",
+    "title": "Italy Culture",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=Italy+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "italy-transportation-001",
+    "title": "Italy Transportation",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=Italy+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "italy-packing-001",
+    "title": "Italy Packing",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=Italy+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "italy-safety-001",
+    "title": "Italy Safety",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=Italy+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "italy-destination_information-001",
+    "title": "Italy Destination Information",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=Italy+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "italy-entry_requirements-001",
+    "title": "Italy Entry Requirements",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=Italy+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "italy-visa-001",
+    "title": "Italy Visa",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.esteri.it+Italy+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=Italy+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "italy-activities-001",
+    "title": "Italy Activities",
+    "country": "Italy",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Italy covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in Italy?",
+    "official_source_portals": [
+      {
+        "name": "Italy official tourism information",
+        "url": "https://www.italia.it/en"
+      },
+      {
+        "name": "Italy official government information",
+        "url": "https://www.esteri.it/en/"
+      }
+    ],
+    "category_source": {
+      "name": "Italy Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.italia.it+Italy+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Italy things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=Italy+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

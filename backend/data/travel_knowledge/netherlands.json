@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "netherlands-culture-001",
+    "title": "Netherlands Culture",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=Netherlands+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "netherlands-transportation-001",
+    "title": "Netherlands Transportation",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=Netherlands+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "netherlands-packing-001",
+    "title": "Netherlands Packing",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=Netherlands+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "netherlands-safety-001",
+    "title": "Netherlands Safety",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=Netherlands+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "netherlands-destination_information-001",
+    "title": "Netherlands Destination Information",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=Netherlands+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "netherlands-entry_requirements-001",
+    "title": "Netherlands Entry Requirements",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=Netherlands+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "netherlands-visa-001",
+    "title": "Netherlands Visa",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.netherlandsworldwide.nl+Netherlands+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=Netherlands+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "netherlands-activities-001",
+    "title": "Netherlands Activities",
+    "country": "Netherlands",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Netherlands covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in Netherlands?",
+    "official_source_portals": [
+      {
+        "name": "Netherlands official tourism information",
+        "url": "https://www.holland.com/global/tourism.htm"
+      },
+      {
+        "name": "Netherlands official government information",
+        "url": "https://www.netherlandsworldwide.nl/"
+      }
+    ],
+    "category_source": {
+      "name": "Netherlands Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.holland.com+Netherlands+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Netherlands things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=Netherlands+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

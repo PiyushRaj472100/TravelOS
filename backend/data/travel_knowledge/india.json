@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "india-culture-001",
+    "title": "India Culture",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=India+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "india-transportation-001",
+    "title": "India Transportation",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=India+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "india-packing-001",
+    "title": "India Packing",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=India+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "india-safety-001",
+    "title": "India Safety",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=India+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "india-destination_information-001",
+    "title": "India Destination Information",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=India+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "india-entry_requirements-001",
+    "title": "India Entry Requirements",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=India+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "india-visa-001",
+    "title": "India Visa",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.mea.gov.in+India+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=India+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "india-activities-001",
+    "title": "India Activities",
+    "country": "India",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for India covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in India?",
+    "official_source_portals": [
+      {
+        "name": "India official tourism information",
+        "url": "https://www.incredibleindia.gov.in/en"
+      },
+      {
+        "name": "India official government information",
+        "url": "https://www.mea.gov.in/"
+      }
+    ],
+    "category_source": {
+      "name": "India Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.incredibleindia.gov.in+India+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "India things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=India+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

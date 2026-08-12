@@ -1,0 +1,201 @@
+{
+  "dataset_name": "TravelOS 30 Country RAG Knowledge",
+  "version": "2.0",
+  "country_count": 30,
+  "documents_per_country": 8,
+  "document_count": 240,
+  "folder_name": "travel_knowledge",
+  "countries": [
+    {
+      "slug": "japan",
+      "country": "Japan",
+      "currency": "JPY",
+      "file": "japan.json"
+    },
+    {
+      "slug": "china",
+      "country": "China",
+      "currency": "CNY",
+      "file": "china.json"
+    },
+    {
+      "slug": "india",
+      "country": "India",
+      "currency": "INR",
+      "file": "india.json"
+    },
+    {
+      "slug": "thailand",
+      "country": "Thailand",
+      "currency": "THB",
+      "file": "thailand.json"
+    },
+    {
+      "slug": "singapore",
+      "country": "Singapore",
+      "currency": "SGD",
+      "file": "singapore.json"
+    },
+    {
+      "slug": "malaysia",
+      "country": "Malaysia",
+      "currency": "MYR",
+      "file": "malaysia.json"
+    },
+    {
+      "slug": "indonesia",
+      "country": "Indonesia",
+      "currency": "IDR",
+      "file": "indonesia.json"
+    },
+    {
+      "slug": "vietnam",
+      "country": "Vietnam",
+      "currency": "VND",
+      "file": "vietnam.json"
+    },
+    {
+      "slug": "south_korea",
+      "country": "South Korea",
+      "currency": "KRW",
+      "file": "south_korea.json"
+    },
+    {
+      "slug": "uae",
+      "country": "United Arab Emirates",
+      "currency": "AED",
+      "file": "uae.json"
+    },
+    {
+      "slug": "turkey",
+      "country": "Türkiye",
+      "currency": "TRY",
+      "file": "turkey.json"
+    },
+    {
+      "slug": "saudi_arabia",
+      "country": "Saudi Arabia",
+      "currency": "SAR",
+      "file": "saudi_arabia.json"
+    },
+    {
+      "slug": "france",
+      "country": "France",
+      "currency": "EUR",
+      "file": "france.json"
+    },
+    {
+      "slug": "italy",
+      "country": "Italy",
+      "currency": "EUR",
+      "file": "italy.json"
+    },
+    {
+      "slug": "spain",
+      "country": "Spain",
+      "currency": "EUR",
+      "file": "spain.json"
+    },
+    {
+      "slug": "germany",
+      "country": "Germany",
+      "currency": "EUR",
+      "file": "germany.json"
+    },
+    {
+      "slug": "netherlands",
+      "country": "Netherlands",
+      "currency": "EUR",
+      "file": "netherlands.json"
+    },
+    {
+      "slug": "switzerland",
+      "country": "Switzerland",
+      "currency": "CHF",
+      "file": "switzerland.json"
+    },
+    {
+      "slug": "greece",
+      "country": "Greece",
+      "currency": "EUR",
+      "file": "greece.json"
+    },
+    {
+      "slug": "portugal",
+      "country": "Portugal",
+      "currency": "EUR",
+      "file": "portugal.json"
+    },
+    {
+      "slug": "united_kingdom",
+      "country": "United Kingdom",
+      "currency": "GBP",
+      "file": "united_kingdom.json"
+    },
+    {
+      "slug": "usa",
+      "country": "United States",
+      "currency": "USD",
+      "file": "usa.json"
+    },
+    {
+      "slug": "canada",
+      "country": "Canada",
+      "currency": "CAD",
+      "file": "canada.json"
+    },
+    {
+      "slug": "mexico",
+      "country": "Mexico",
+      "currency": "MXN",
+      "file": "mexico.json"
+    },
+    {
+      "slug": "australia",
+      "country": "Australia",
+      "currency": "AUD",
+      "file": "australia.json"
+    },
+    {
+      "slug": "new_zealand",
+      "country": "New Zealand",
+      "currency": "NZD",
+      "file": "new_zealand.json"
+    },
+    {
+      "slug": "egypt",
+      "country": "Egypt",
+      "currency": "EGP",
+      "file": "egypt.json"
+    },
+    {
+      "slug": "south_africa",
+      "country": "South Africa",
+      "currency": "ZAR",
+      "file": "south_africa.json"
+    },
+    {
+      "slug": "brazil",
+      "country": "Brazil",
+      "currency": "BRL",
+      "file": "brazil.json"
+    },
+    {
+      "slug": "austria",
+      "country": "Austria",
+      "currency": "EUR",
+      "file": "austria.json"
+    }
+  ],
+  "categories": [
+    "culture",
+    "transportation",
+    "packing",
+    "safety",
+    "destination_information",
+    "entry_requirements",
+    "visa",
+    "activities"
+  ],
+  "important_rule": "Static RAG is for general/stable knowledge. Current exchange rates, weather, flight availability, hotel prices, current visa/entry rules and current transportation schedules must use live services or the authoritative current source."
+}

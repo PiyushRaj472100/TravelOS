@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "austria-culture-001",
+    "title": "Austria Culture",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=Austria+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "austria-transportation-001",
+    "title": "Austria Transportation",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=Austria+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "austria-packing-001",
+    "title": "Austria Packing",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=Austria+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "austria-safety-001",
+    "title": "Austria Safety",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=Austria+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "austria-destination_information-001",
+    "title": "Austria Destination Information",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=Austria+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "austria-entry_requirements-001",
+    "title": "Austria Entry Requirements",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=Austria+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "austria-visa-001",
+    "title": "Austria Visa",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.oesterreich.gv.at+Austria+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=Austria+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "austria-activities-001",
+    "title": "Austria Activities",
+    "country": "Austria",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Austria covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in Austria?",
+    "official_source_portals": [
+      {
+        "name": "Austria official tourism information",
+        "url": "https://www.austria.info/en"
+      },
+      {
+        "name": "Austria official government information",
+        "url": "https://www.oesterreich.gv.at/en.html"
+      }
+    ],
+    "category_source": {
+      "name": "Austria Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.austria.info+Austria+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Austria things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=Austria+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

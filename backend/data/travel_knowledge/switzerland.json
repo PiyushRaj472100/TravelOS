@@ -1,0 +1,266 @@
+[
+  {
+    "document_id": "switzerland-culture-001",
+    "title": "Switzerland Culture",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "culture",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+culture+customs+etiquette+traditions+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering culture customs etiquette traditions. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What customs and cultural etiquette should I know in Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Culture official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+culture+customs+etiquette+traditions+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland culture customs etiquette traditions official",
+      "url": "https://www.google.com/search?q=Switzerland+culture+customs+etiquette+traditions+official"
+    }
+  },
+  {
+    "document_id": "switzerland-transportation-001",
+    "title": "Switzerland Transportation",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "transportation",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+transportation+public+transport+getting+around+trains+buses+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering transportation public transport getting around trains buses. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does public transportation work in Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Transportation official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+transportation+public+transport+getting+around+trains+buses+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland transportation public transport getting around trains buses official",
+      "url": "https://www.google.com/search?q=Switzerland+transportation+public+transport+getting+around+trains+buses+official"
+    }
+  },
+  {
+    "document_id": "switzerland-packing-001",
+    "title": "Switzerland Packing",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "packing",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+packing+what+to+pack+travel+planning+climate+luggage+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering packing what to pack travel planning climate luggage. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should I pack for Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Packing official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+packing+what+to+pack+travel+planning+climate+luggage+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland packing what to pack travel planning climate luggage official",
+      "url": "https://www.google.com/search?q=Switzerland+packing+what+to+pack+travel+planning+climate+luggage+official"
+    }
+  },
+  {
+    "document_id": "switzerland-safety-001",
+    "title": "Switzerland Safety",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "safety",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+travel+safety+security+health+scams+emergency+advice+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering travel safety security health scams emergency advice. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What should tourists know about safety in Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Safety official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+travel+safety+security+health+scams+emergency+advice+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland travel safety security health scams emergency advice official",
+      "url": "https://www.google.com/search?q=Switzerland+travel+safety+security+health+scams+emergency+advice+official"
+    }
+  },
+  {
+    "document_id": "switzerland-destination_information-001",
+    "title": "Switzerland Destination Information",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "destination_information",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+destinations+attractions+regions+tourism+places+to+visit+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering destinations attractions regions tourism places to visit. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the main destinations and attractions in Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Destination Information official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+destinations+attractions+regions+tourism+places+to+visit+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland destinations attractions regions tourism places to visit official",
+      "url": "https://www.google.com/search?q=Switzerland+destinations+attractions+regions+tourism+places+to+visit+official"
+    }
+  },
+  {
+    "document_id": "switzerland-entry_requirements-001",
+    "title": "Switzerland Entry Requirements",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "entry_requirements",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+entry+requirements+passport+border+entry+immigration+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering entry requirements passport border entry immigration. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What are the entry requirements for Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Entry Requirements official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+entry+requirements+passport+border+entry+immigration+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland entry requirements passport border entry immigration official",
+      "url": "https://www.google.com/search?q=Switzerland+entry+requirements+passport+border+entry+immigration+official"
+    }
+  },
+  {
+    "document_id": "switzerland-visa-001",
+    "title": "Switzerland Visa",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "visa",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+tourist+visa+visa+requirements+application+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering tourist visa visa requirements application. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "How does the tourist visa process work for Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Visa official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.eda.admin.ch+Switzerland+tourist+visa+visa+requirements+application+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland tourist visa visa requirements application official",
+      "url": "https://www.google.com/search?q=Switzerland+tourist+visa+visa+requirements+application+official"
+    }
+  },
+  {
+    "document_id": "switzerland-activities-001",
+    "title": "Switzerland Activities",
+    "country": "Switzerland",
+    "region": null,
+    "city": null,
+    "category": "activities",
+    "source": "official-country-source",
+    "source_url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+things+to+do+activities+attractions+experiences+official",
+    "last_updated": null,
+    "text": "TravelOS has an official-source directory for Switzerland covering things to do activities attractions experiences. Use the linked authoritative source for the latest detailed information. This record is not itself a claim that a current rule, price, schedule, or requirement is valid.",
+    "suggested_user_question": "What activities are popular in Switzerland?",
+    "official_source_portals": [
+      {
+        "name": "Switzerland official tourism information",
+        "url": "https://www.myswitzerland.com/en/"
+      },
+      {
+        "name": "Switzerland official government information",
+        "url": "https://www.eda.admin.ch/"
+      }
+    ],
+    "category_source": {
+      "name": "Switzerland Activities official-source search",
+      "url": "https://www.google.com/search?q=site%3Awww.myswitzerland.com+Switzerland+things+to+do+activities+attractions+experiences+official",
+      "source_type": "official-site-search"
+    },
+    "fallback_search": {
+      "search_engine": "Google",
+      "query": "Switzerland things to do activities attractions experiences official",
+      "url": "https://www.google.com/search?q=Switzerland+things+to+do+activities+attractions+experiences+official"
+    }
+  }
+]

@@ -139,7 +139,7 @@ SIMILARITY SCORE:
     ):
 
         # ---------------------------------------------
-        # 1. Retrieve knowledge
+        # 1. Retrieve relevant knowledge
         # ---------------------------------------------
 
         results = self.retriever.search(
@@ -153,7 +153,7 @@ SIMILARITY SCORE:
 
 
         # ---------------------------------------------
-        # 2. No retrieval results
+        # 2. No results
         # ---------------------------------------------
 
         if not results:
@@ -215,7 +215,7 @@ SIMILARITY SCORE:
 
 
         # ---------------------------------------------
-        # 7. Grounded LLM prompt
+        # 7. Grounded prompt
         # ---------------------------------------------
 
         prompt = f"""
@@ -234,7 +234,7 @@ STRICT RULES:
    enough information, clearly say so.
 5. Prefer information relevant to the requested
    country, region, city, and category.
-6. Do not treat the similarity score as factual
+6. Do not treat similarity scores as factual
    information.
 7. Keep the answer clear and useful.
 
@@ -242,11 +242,9 @@ USER QUESTION:
 
 {question}
 
-
 RETRIEVED TRAVEL KNOWLEDGE:
 
 {context}
-
 
 Answer the question using the retrieved knowledge.
 """
@@ -282,7 +280,11 @@ Answer the question using the retrieved knowledge.
         question: str,
         state: TravelState,
         top_k: int = 5,
-        min_score: float = DEFAULT_MIN_SCORE
+        min_score: float = DEFAULT_MIN_SCORE,
+        category: str | None = None,
+        countries: list[str] | None = None,
+        regions: list[str] | None = None,
+        cities: list[str] | None = None
     ):
 
         # ---------------------------------------------
@@ -296,20 +298,46 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 2. Multi-destination retrieval
+        # 2. Use QueryAnalyzer locations when provided
+        #
+        # Otherwise fall back to TravelState context.
+        # ---------------------------------------------
+
+        countries = (
+            countries
+            if countries is not None
+            else context["countries"]
+        )
+
+        regions = (
+            regions
+            if regions is not None
+            else context["regions"]
+        )
+
+        cities = (
+            cities
+            if cities is not None
+            else context["cities"]
+        )
+
+
+        # ---------------------------------------------
+        # 3. Multi-destination retrieval
         # ---------------------------------------------
 
         results = self.retriever.search_multi(
             query=question,
             top_k=top_k,
-            countries=context["countries"],
-            regions=context["regions"],
-            cities=context["cities"]
+            countries=countries,
+            regions=regions,
+            cities=cities,
+            category=category
         )
 
 
         # ---------------------------------------------
-        # 3. No results
+        # 4. No results
         # ---------------------------------------------
 
         if not results:
@@ -324,7 +352,7 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 4. Apply similarity threshold
+        # 5. Apply similarity threshold
         # ---------------------------------------------
 
         filtered_results = (
@@ -336,7 +364,7 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 5. No sufficiently relevant knowledge
+        # 6. No sufficiently relevant knowledge
         # ---------------------------------------------
 
         if not filtered_results:
@@ -351,7 +379,7 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 6. Build knowledge context
+        # 7. Build knowledge context
         # ---------------------------------------------
 
         knowledge = self._build_context(
@@ -360,7 +388,7 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 7. Build sources
+        # 8. Build sources
         # ---------------------------------------------
 
         sources = [
@@ -370,7 +398,7 @@ Answer the question using the retrieved knowledge.
 
 
         # ---------------------------------------------
-        # 8. Grounded prompt
+        # 9. Grounded prompt
         # ---------------------------------------------
 
         prompt = f"""
@@ -398,11 +426,9 @@ USER QUESTION:
 
 {question}
 
-
 TRAVEL KNOWLEDGE:
 
 {knowledge}
-
 
 Answer the user's question using the retrieved
 knowledge.
@@ -410,7 +436,7 @@ knowledge.
 
 
         # ---------------------------------------------
-        # 9. Generate answer
+        # 10. Generate answer
         # ---------------------------------------------
 
         response = (
@@ -421,7 +447,7 @@ knowledge.
 
 
         # ---------------------------------------------
-        # 10. Return answer + sources
+        # 11. Return answer + sources
         # ---------------------------------------------
 
         return {

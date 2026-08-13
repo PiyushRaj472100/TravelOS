@@ -223,6 +223,20 @@ def chat(
                 f"{result['rate']} "
                 f"{result['target_currency']}."
             )
+            
+        elif query.category == "weather":
+            answer = (
+            f"Current weather in "
+            f"{result['city']}, "
+            f"{result['country']}: "
+            f"{result['temperature']}°C. "
+            f"Feels like "
+            f"{result['apparent_temperature']}°C. "
+            f"Humidity is "
+            f"{result['humidity']}%. "
+            f"Wind speed is "
+            f"{result['wind_speed']} km/h."
+        )
 
         else:
 
@@ -233,7 +247,8 @@ def chat(
             session_id=session_id,
             message=answer,
             missing_information=[],
-            travel_state=state.model_dump()
+            travel_state=state.model_dump(),
+            sources= []
         )
 
 

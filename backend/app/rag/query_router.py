@@ -7,19 +7,22 @@ class QueryRouter:
         "weather",
         "currency",
         "flight",
+        "accommodation",
     }
 
     RAG_CATEGORIES = {
         "visa",
         "entry_requirements",
         "regulations",
-        "transportation",
-        "restaurants",
-        "activities",
         "culture",
         "safety",
         "packing",
         "destination_information",
+        "transportation",
+        "restaurants",
+        "activities",
+        "accommodation",
+        "general",
     }
 
     def route(
@@ -27,40 +30,48 @@ class QueryRouter:
         query: RAGQuery
     ) -> str:
 
-        # -----------------------------------------
-        # 1. Explicit current/live request
-        # -----------------------------------------
+        # ---------------------------------------------
+        # 1. Explicit live information always wins
+        # ---------------------------------------------
 
         if query.needs_live_data:
+
             return "live"
 
-        # -----------------------------------------
-        # 2. User is planning their own trip
-        # -----------------------------------------
+
+        # ---------------------------------------------
+        # 2. Planning intent
+        # ---------------------------------------------
 
         if query.query_type == "planning":
+
             return "planning"
 
-        # -----------------------------------------
-        # 3. User wants knowledge from RAG
-        # -----------------------------------------
 
-        if query.query_type == "knowledge":
+        # ---------------------------------------------
+        # 3. Knowledge categories
+        # ---------------------------------------------
 
-            if query.category in self.RAG_CATEGORIES:
-                return "rag"
+        if query.category in self.RAG_CATEGORIES:
 
             return "rag"
 
-        # -----------------------------------------
-        # 4. Live category fallback
-        # -----------------------------------------
+
+        # ---------------------------------------------
+        # 4. Live categories
+        #
+        # If category is naturally live but the user
+        # didn't explicitly request current information,
+        # we treat it as knowledge where possible.
+        # ---------------------------------------------
 
         if query.category in self.LIVE_CATEGORIES:
-            return "live"
 
-        # -----------------------------------------
-        # 5. Safe default
-        # -----------------------------------------
+            return "rag"
 
-        return "planning"
+
+        # ---------------------------------------------
+        # 5. Safe fallback
+        # ---------------------------------------------
+
+        return "rag"

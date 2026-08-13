@@ -9,8 +9,97 @@ class RAGRetriever:
         vector_store: VectorStore,
         embedding_service: EmbeddingService
     ):
+
         self.vector_store = vector_store
         self.embedding_service = embedding_service
+
+
+    # =================================================
+    # Normalize metadata values
+    # =================================================
+
+    @staticmethod
+    def _normalize(
+        value: str | None
+    ) -> str | None:
+
+        if value is None:
+            return None
+
+        return value.strip().lower()
+
+
+    # =================================================
+    # Check whether document matches metadata filters
+    # =================================================
+
+    def _matches_filters(
+        self,
+        document,
+        country: str | None = None,
+        region: str | None = None,
+        city: str | None = None,
+        category: str | None = None
+    ) -> bool:
+
+        # ---------------------------------------------
+        # Country
+        # ---------------------------------------------
+
+        if country:
+
+            if (
+                self._normalize(document.country)
+                != self._normalize(country)
+            ):
+                return False
+
+
+        # ---------------------------------------------
+        # Region
+        # ---------------------------------------------
+
+        if region:
+
+            if (
+                self._normalize(document.region)
+                != self._normalize(region)
+            ):
+                return False
+
+
+        # ---------------------------------------------
+        # City
+        # ---------------------------------------------
+
+        if city:
+
+            if (
+                self._normalize(document.city)
+                != self._normalize(city)
+            ):
+                return False
+
+
+        # ---------------------------------------------
+        # Category
+        # ---------------------------------------------
+
+        if category:
+
+            if (
+                self._normalize(document.category)
+                != self._normalize(category)
+            ):
+                return False
+
+
+        return True
+
+
+    # =================================================
+    # Single-location search
+    # =================================================
 
     def search(
         self,
@@ -22,17 +111,62 @@ class RAGRetriever:
         category: str | None = None
     ):
 
-        # Convert the user's question into an embedding
-        query_vector = self.embedding_service.embed_query(
-            query
+        # ---------------------------------------------
+        # 1. Convert query to embedding
+        # ---------------------------------------------
+
+        query_vector = (
+            self.embedding_service.embed_query(
+                query
+            )
         )
 
-        # Retrieve extra candidates because
-        # metadata filtering may remove some results.
+
+        # ---------------------------------------------
+        # 2. Decide how many FAISS candidates
+        #    to retrieve
+        # ---------------------------------------------
+
+        has_filters = any(
+            [
+                country,
+                region,
+                city,
+                category
+            ]
+        )
+
+
+        if has_filters:
+
+            # -----------------------------------------
+            # We currently have only 240 documents.
+            #
+            # Retrieve all candidates so that metadata
+            # filtering cannot accidentally remove the
+            # correct document.
+            # -----------------------------------------
+
+            candidate_k = self.vector_store.size
+
+        else:
+
+            candidate_k = top_k
+
+
+        # ---------------------------------------------
+        # 3. Semantic search
+        # ---------------------------------------------
+
         results = self.vector_store.search(
             query_vector,
-            top_k=top_k * 3
+            top_k=candidate_k
         )
+
+
+        # ---------------------------------------------
+        # 4. Metadata filtering
+        # ---------------------------------------------
 
         filtered = []
 
@@ -40,29 +174,41 @@ class RAGRetriever:
 
             document = result["document"]
 
-            # Filter by country
-            if country and document.country != country:
+            if not self._matches_filters(
+                document=document,
+                country=country,
+                region=region,
+                city=city,
+                category=category
+            ):
                 continue
 
-            # Filter by region
-            if region and document.region != region:
-                continue
+            filtered.append(
+                result
+            )
 
-            # Filter by city
-            if city and document.city != city:
-                continue
 
-            # Filter by category
-            if category and document.category != category:
-                continue
+        # ---------------------------------------------
+        # 5. FAISS already returns similarity order,
+        #    but explicitly sort for safety.
+        # ---------------------------------------------
 
-            filtered.append(result)
+        filtered.sort(
+            key=lambda result: result["score"],
+            reverse=True
+        )
 
-            # Stop once we have enough results
-            if len(filtered) >= top_k:
-                break
 
-        return filtered
+        # ---------------------------------------------
+        # 6. Return top results
+        # ---------------------------------------------
+
+        return filtered[:top_k]
+
+
+    # =================================================
+    # Multi-destination search
+    # =================================================
 
     def search_multi(
         self,
@@ -78,11 +224,13 @@ class RAGRetriever:
         regions = regions or []
         cities = cities or []
 
+
         all_results = []
 
-        # -------------------------------------------------
-        # Search each country
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 1. Search each country
+        # ---------------------------------------------
 
         for country in countries:
 
@@ -93,11 +241,14 @@ class RAGRetriever:
                 category=category
             )
 
-            all_results.extend(results)
+            all_results.extend(
+                results
+            )
 
-        # -------------------------------------------------
-        # Search each region
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 2. Search each region
+        # ---------------------------------------------
 
         for region in regions:
 
@@ -108,11 +259,14 @@ class RAGRetriever:
                 category=category
             )
 
-            all_results.extend(results)
+            all_results.extend(
+                results
+            )
 
-        # -------------------------------------------------
-        # Search each city
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 3. Search each city
+        # ---------------------------------------------
 
         for city in cities:
 
@@ -123,11 +277,14 @@ class RAGRetriever:
                 category=category
             )
 
-            all_results.extend(results)
+            all_results.extend(
+                results
+            )
 
-        # -------------------------------------------------
-        # Global search if no location was provided
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 4. No location specified
+        # ---------------------------------------------
 
         if not countries and not regions and not cities:
 
@@ -137,38 +294,63 @@ class RAGRetriever:
                 category=category
             )
 
-        # -------------------------------------------------
-        # Remove duplicate documents
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 5. Remove duplicates
+        # ---------------------------------------------
 
         unique_results = []
 
         seen = set()
 
+
         for result in all_results:
 
             document = result["document"]
 
-            key = (
-                document.title,
-                document.source,
-                document.text
+
+            # Prefer document_id when available
+            if document.document_id:
+
+                key = document.document_id
+
+            else:
+
+                key = (
+                    document.title,
+                    document.country,
+                    document.region,
+                    document.city,
+                    document.category,
+                    document.source
+                )
+
+
+            if key in seen:
+                continue
+
+
+            seen.add(
+                key
             )
 
-            if key not in seen:
+            unique_results.append(
+                result
+            )
 
-                seen.add(key)
 
-                unique_results.append(result)
+        # ---------------------------------------------
+        # 6. Global ranking
+        # ---------------------------------------------
 
-       
-        # Return only the requested number of results
-        
-        unique_results.sort(    # global ranking by score
+        unique_results.sort(
             key=lambda result: result["score"],
             reverse=True
         )
-        
-        
-        
+
+
+        # ---------------------------------------------
+        # 7. Return top results
+        # ---------------------------------------------
+
         return unique_results[:top_k]

@@ -64,7 +64,6 @@ class VectorStore:
                 "number of documents."
             )
 
-
         vector_array = np.array(
             vectors,
             dtype="float32"
@@ -92,18 +91,15 @@ class VectorStore:
         if self.index.ntotal == 0:
             return []
 
-
         vector_array = np.array(
             [vector],
             dtype="float32"
         )
 
-
         actual_k = min(
             top_k,
             self.index.ntotal
         )
-
 
         scores, indices = (
             self.index.search(
@@ -112,9 +108,7 @@ class VectorStore:
             )
         )
 
-
         results = []
-
 
         for score, index in zip(
             scores[0],
@@ -124,12 +118,10 @@ class VectorStore:
             if index == -1:
                 continue
 
-
             results.append({
                 "score": float(score),
                 "document": self.documents[index]
             })
-
 
         return results
 
@@ -173,14 +165,33 @@ class VectorStore:
                 f"FAISS index not found: {path}"
             )
 
-
         self.index = faiss.read_index(
             str(path)
         )
 
 
     # =================================================
-    # Statistics
+    # Attach metadata documents
+    # =================================================
+
+    def set_documents(
+        self,
+        documents: list
+    ):
+
+        if len(documents) != self.index.ntotal:
+
+            raise ValueError(
+                "Number of metadata documents "
+                "does not match number of FAISS "
+                "vectors."
+            )
+
+        self.documents = documents
+
+
+    # =================================================
+    # Number of vectors
     # =================================================
 
     @property

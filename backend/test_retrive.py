@@ -1,101 +1,160 @@
-from app.rag.document import RAGDocument
-from app.rag.embeddings import EmbeddingService
-from app.rag.vector_store import VectorStore
-from app.rag.metadata_store import MetadataStore
-from app.rag.ingestion import RAGIngestionService
-from app.rag.retriever import RAGRetriever
+from app.rag.rag_manager import RAGManager
+from app.services.llm_service import LLMService
 
 
-embedding_service = EmbeddingService()
+# ============================================
+# Load RAG
+# ============================================
 
+llm_service = LLMService()
 
-# Gemini embedding dimension
-dimension = 3072
-
-
-vector_store = VectorStore(
-    dimension=dimension
-)
-
-metadata_store = MetadataStore()
-
-
-ingestion = RAGIngestionService(
-    embedding_service=embedding_service,
-    vector_store=vector_store,
-    metadata_store=metadata_store
+rag_manager = RAGManager(
+    llm_service=llm_service
 )
 
 
-documents = [
+rag_service = (
+    rag_manager.get_rag_service()
+)
 
-    RAGDocument(
-        text="""
-        Travelers should verify the current entry,
-        passport and visa requirements before visiting
-        a foreign destination.
-        """,
-        country="Country-A",
-        category="entry_requirements",
-        source="development",
-        title="Entry Requirements"
-    ),
 
-    RAGDocument(
-        text="""
-        Travelers should check local transportation,
-        public transit and regional travel options
-        before beginning their journey.
-        """,
-        country="Country-B",
-        category="transportation",
-        source="development",
-        title="Transportation"
-    ),
+retriever = (
+    rag_service.retriever
+)
 
-    RAGDocument(
-        text="""
-        Travelers should check local cultural customs
-        and photography restrictions at specific sites.
-        """,
-        country="Country-A",
-        category="culture",
-        source="development",
-        title="Cultural Guidance"
-    )
+
+# ============================================
+# Test cases
+# ============================================
+
+tests = [
+
+    {
+        "question": "What are the safety considerations?",
+        "country": "Australia",
+        "category": "safety"
+    },
+
+    {
+        "question": "What are the visa requirements?",
+        "country": "Japan",
+        "category": "visa"
+    },
+
+    {
+        "question": "What safety information is available?",
+        "country": "United Arab Emirates",
+        "category": "safety"
+    },
+
+    {
+        "question": "How is transportation handled?",
+        "country": "India",
+        "category": "transportation"
+    },
+
+    {
+        "question": "What should I pack?",
+        "country": "France",
+        "category": "packing"
+    }
 ]
 
 
-for document in documents:
+# ============================================
+# Run tests
+# ============================================
 
-    ingestion.ingest(
-        document
+for number, test in enumerate(
+    tests,
+    start=1
+):
+
+    print(
+        "\n========================================"
+    )
+
+    print(
+        f"TEST {number}"
+    )
+
+    print(
+        "========================================"
+    )
+
+    print(
+        "Question:",
+        test["question"]
+    )
+
+    print(
+        "Country:",
+        test["country"]
+    )
+
+    print(
+        "Category:",
+        test["category"]
     )
 
 
-retriever = RAGRetriever(
-    vector_store=vector_store,
-    embedding_service=embedding_service
+    results = retriever.search(
+        query=test["question"],
+        country=test["country"],
+        category=test["category"],
+        top_k=3
+    )
+
+
+    print(
+        "\nRESULTS:"
+    )
+
+
+    if not results:
+
+        print(
+            "No results found."
+        )
+
+        continue
+
+
+    for result in results:
+
+        document = result["document"]
+
+        print(
+            "\nTitle:",
+            document.title
+        )
+
+        print(
+            "Country:",
+            document.country
+        )
+
+        print(
+            "Category:",
+            document.category
+        )
+
+        print(
+            "Score:",
+            result["score"]
+        )
+
+        print(
+            "Source:",
+            document.source
+        )
+
+        print(
+            "URL:",
+            document.source_url
+        )
+        print(
+    "Fallback:",
+    document.fallback_search_url
 )
-
-
-results = retriever.search(
-    query="What are the entry requirements?",
-    country="Country-A",
-    category="entry_requirements",
-    top_k=3
-)
-
-
-print("\n===== RESULTS =====")
-
-for result in results:
-
-    print("\nScore:", result["score"])
-
-    document = result["document"]
-
-    print("Country:", document.country)
-    print("Category:", document.category)
-    print("Title:", document.title)
-    print("Text:", document.text)
+        

@@ -1,132 +1,213 @@
-from app.rag.embeddings import EmbeddingService
-from app.rag.vector_store import VectorStore
-from app.rag.metadata_store import MetadataStore
-from app.rag.ingestion import RAGIngestionService
-from app.rag.retriever import RAGRetriever
-from app.rag.rag_services import RAGService
-from app.rag.document import RAGDocument
+from pathlib import Path
 
-from app.services.llm_service import LLMService
+from app.rag.embeddings import (
+    EmbeddingService
+)
+
+from app.rag.vector_store import (
+    VectorStore
+)
+
+from app.rag.metadata_store import (
+    MetadataStore
+)
+
+from app.rag.retriever import (
+    RAGRetriever
+)
+
+from app.rag.rag_services import (
+    RAGService
+)
 
 
 class RAGManager:
 
     def __init__(
         self,
-        llm_service: LLMService
+        llm_service
     ):
 
-        # ---------------------------------------------
-        # 1. Embedding service
-        # ---------------------------------------------
+        self.llm_service = (
+            llm_service
+        )
+
+
+        # =============================================
+        # Persistent storage paths
+        # =============================================
+
+        self.storage_dir = Path(
+            "data/vector_store"
+        )
+
+        self.faiss_path = (
+            self.storage_dir
+            / "travel.index"
+        )
+
+        self.metadata_path = (
+            self.storage_dir
+            / "metadata.json"
+        )
+
+
+        # =============================================
+        # Embedding service
+        # =============================================
 
         self.embedding_service = (
             EmbeddingService()
         )
 
-        # Gemini embedding dimension
-        dimension = 3072
 
-        # ---------------------------------------------
-        # 2. Vector store
-        # ---------------------------------------------
+        # =============================================
+        # Vector store
+        # =============================================
 
         self.vector_store = VectorStore(
-            dimension=dimension
+            dimension=3072
         )
 
-        # ---------------------------------------------
-        # 3. Metadata store
-        # ---------------------------------------------
 
-        self.metadata_store = MetadataStore()
+        # =============================================
+        # Metadata store
+        # =============================================
 
-        # ---------------------------------------------
-        # 4. Ingestion service
-        # ---------------------------------------------
-
-        self.ingestion = RAGIngestionService(
-            embedding_service=(
-                self.embedding_service
-            ),
-            vector_store=self.vector_store,
-            metadata_store=self.metadata_store
+        self.metadata_store = (
+            MetadataStore()
         )
 
-        # ---------------------------------------------
-        # 5. Load development knowledge
-        # ---------------------------------------------
 
-        self._load_documents()
+        # =============================================
+        # Load persistent knowledge base
+        # =============================================
 
-        # ---------------------------------------------
-        # 6. Retriever
-        # ---------------------------------------------
+        self._load_knowledge_base()
+
+
+        # =============================================
+        # Connect metadata to FAISS
+        # =============================================
+
+        self.vector_store.set_documents(
+            self.metadata_store.all()
+        )
+
+
+        # =============================================
+        # Retriever
+        # =============================================
 
         self.retriever = RAGRetriever(
             vector_store=self.vector_store,
-            embedding_service=(
-                self.embedding_service
-            )
+            embedding_service=self.embedding_service
         )
 
-        # ---------------------------------------------
-        # 7. RAG service
-        # ---------------------------------------------
+
+        # =============================================
+        # RAG Service
+        # =============================================
 
         self.rag_service = RAGService(
             retriever=self.retriever,
-            llm_service=llm_service
+            llm_service=self.llm_service
         )
 
-    def _load_documents(self):
 
-        documents = [
+    # =================================================
+    # Load knowledge base
+    # =================================================
 
-            RAGDocument(
-                text="""
-                Travelers should verify the current
-                entry, passport and visa requirements
-                before visiting a foreign destination.
-                """,
-                country="Country-A",
-                category="entry_requirements",
-                source="development",
-                title="Entry Requirements"
-            ),
+    def _load_knowledge_base(self):
 
-            RAGDocument(
-                text="""
-                Travelers should check local
-                transportation, public transit and
-                regional travel options before
-                beginning their journey.
-                """,
-                country="Country-B",
-                category="transportation",
-                source="development",
-                title="Transportation"
-            ),
+        if not self.faiss_path.exists():
 
-            RAGDocument(
-                text="""
-                Travelers should check local cultural
-                customs and photography restrictions
-                at specific sites.
-                """,
-                country="Country-A",
-                category="culture",
-                source="development",
-                title="Cultural Guidance"
-            )
-        ]
-
-        for document in documents:
-
-            self.ingestion.ingest(
-                document
+            raise FileNotFoundError(
+                "FAISS knowledge base not found:\n"
+                f"{self.faiss_path}\n\n"
+                "Run test_full_ingestion.py first."
             )
 
-    def get_rag_service(self) -> RAGService:
+
+        if not self.metadata_path.exists():
+
+            raise FileNotFoundError(
+                "RAG metadata not found:\n"
+                f"{self.metadata_path}\n\n"
+                "Run test_full_ingestion.py first."
+            )
+
+
+        print(
+            "\n========================================"
+        )
+
+        print(
+            "Loading TravelOS RAG knowledge base..."
+        )
+
+        print(
+            "========================================"
+        )
+
+
+        # ---------------------------------------------
+        # Load FAISS
+        # ---------------------------------------------
+
+        self.vector_store.load(
+            str(self.faiss_path)
+        )
+
+
+        # ---------------------------------------------
+        # Load metadata
+        # ---------------------------------------------
+
+        self.metadata_store.load(
+            str(self.metadata_path)
+        )
+
+
+        # ---------------------------------------------
+        # Validate
+        # ---------------------------------------------
+
+        if (
+            self.vector_store.size
+            != self.metadata_store.count()
+        ):
+
+            raise ValueError(
+                "FAISS vector count does not "
+                "match metadata count."
+            )
+
+
+        print(
+            "FAISS vectors:",
+            self.vector_store.size
+        )
+
+        print(
+            "Metadata documents:",
+            self.metadata_store.count()
+        )
+
+        print(
+            "RAG knowledge base loaded successfully."
+        )
+
+        print(
+            "========================================\n"
+        )
+
+
+    # =================================================
+    # Get RAG service
+    # =================================================
+
+    def get_rag_service(self):
 
         return self.rag_service

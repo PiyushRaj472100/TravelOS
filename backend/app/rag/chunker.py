@@ -37,38 +37,57 @@ def chunk_document(
         chunks.append(
             RAGDocument(
 
-                # Knowledge content
+                # ---------------------------------
+                # Main content
+                # ---------------------------------
+
                 text=chunk_text,
 
                 title=document.title,
 
 
+                # ---------------------------------
                 # Geographic metadata
+                # ---------------------------------
+
                 country=document.country,
                 region=document.region,
                 city=document.city,
 
 
+                # ---------------------------------
                 # Category
+                # ---------------------------------
+
                 category=document.category,
 
 
-                # Source / provenance
+                # ---------------------------------
+                # Source metadata
+                # ---------------------------------
+
                 source=document.source,
                 source_url=document.source_url,
+
+                # IMPORTANT:
+                # Preserve fallback search URL
 
                 fallback_search_url=(
                     document.fallback_search_url
                 ),
 
 
+                # ---------------------------------
                 # Freshness
-                last_updated=(
-                    document.last_updated
-                ),
+                # ---------------------------------
+
+                last_updated=document.last_updated,
 
 
+                # ---------------------------------
                 # Document ID
+                # ---------------------------------
+
                 document_id=document.document_id
             )
         )

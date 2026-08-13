@@ -5,14 +5,127 @@ from app.rag.context_builder import RAGContextBuilder
 
 class RAGService:
 
+    # =================================================
+    # Minimum similarity score
+    # =================================================
+
+    DEFAULT_MIN_SCORE = 0.35
+
+
     def __init__(
         self,
         retriever: RAGRetriever,
         llm_service
     ):
+
         self.retriever = retriever
         self.llm_service = llm_service
         self.context_builder = RAGContextBuilder()
+
+
+    # =================================================
+    # Filter results using similarity score
+    # =================================================
+
+    def _filter_by_score(
+        self,
+        results,
+        min_score: float
+    ):
+
+        return [
+            result
+            for result in results
+            if result["score"] >= min_score
+        ]
+
+
+    # =================================================
+    # Build source information
+    # =================================================
+
+    @staticmethod
+    def _build_source(
+        result
+    ):
+
+        document = result["document"]
+
+        return {
+            "title": document.title,
+            "source": document.source,
+
+            "source_url": (
+                document.source_url
+            ),
+
+            "fallback_search_url": (
+                document.fallback_search_url
+            ),
+
+            "country": document.country,
+            "region": document.region,
+            "city": document.city,
+            "category": document.category,
+
+            "score": result["score"]
+        }
+
+
+    # =================================================
+    # Build document context
+    # =================================================
+
+    @staticmethod
+    def _build_context(
+        results
+    ):
+
+        context_parts = []
+
+        for result in results:
+
+            document = result["document"]
+
+            context_parts.append(
+                f"""
+SOURCE:
+{document.title or "Unknown"}
+
+COUNTRY:
+{document.country or "Unknown"}
+
+REGION:
+{document.region or "Unknown"}
+
+CITY:
+{document.city or "Unknown"}
+
+CATEGORY:
+{document.category or "Unknown"}
+
+OFFICIAL SOURCE URL:
+{document.source_url or "Not available"}
+
+FALLBACK SEARCH URL:
+{document.fallback_search_url or "Not available"}
+
+CONTENT:
+{document.text}
+
+SIMILARITY SCORE:
+{result["score"]:.4f}
+"""
+            )
+
+        return "\n\n".join(
+            context_parts
+        )
+
+
+    # =================================================
+    # Standard RAG answer
+    # =================================================
 
     def answer(
         self,
@@ -21,12 +134,13 @@ class RAGService:
         region: str | None = None,
         city: str | None = None,
         category: str | None = None,
-        top_k: int = 5
+        top_k: int = 5,
+        min_score: float = DEFAULT_MIN_SCORE
     ):
 
-        # -------------------------------------------------
-        # 1. Retrieve relevant knowledge
-        # -------------------------------------------------
+        # ---------------------------------------------
+        # 1. Retrieve knowledge
+        # ---------------------------------------------
 
         results = self.retriever.search(
             query=question,
@@ -37,111 +151,153 @@ class RAGService:
             category=category
         )
 
-        # -------------------------------------------------
-        # 2. No knowledge found
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 2. No retrieval results
+        # ---------------------------------------------
 
         if not results:
 
             return {
                 "answer": (
                     "I couldn't find reliable information "
-                    "about this in my travel knowledge base."
+                    "about this in the TravelOS knowledge base."
                 ),
                 "sources": []
             }
 
-        # -------------------------------------------------
-        # 3. Build context
-        # -------------------------------------------------
 
-        context_parts = []
-        sources = []
+        # ---------------------------------------------
+        # 3. Apply similarity threshold
+        # ---------------------------------------------
 
-        for result in results:
-
-            document = result["document"]
-
-            context_parts.append(
-                f"""
-SOURCE: {document.title or "Unknown"}
-COUNTRY: {document.country or "Unknown"}
-CATEGORY: {document.category or "Unknown"}
-
-CONTENT:
-{document.text}
-"""
+        filtered_results = (
+            self._filter_by_score(
+                results,
+                min_score
             )
-
-            sources.append({
-                "title": document.title,
-                "source": document.source,
-                "country": document.country,
-                "category": document.category,
-                "score": result["score"]
-            })
-
-        context = "\n\n".join(
-            context_parts
         )
 
-        # -------------------------------------------------
-        # 4. Ground the LLM in retrieved context
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 4. No sufficiently relevant knowledge
+        # ---------------------------------------------
+
+        if not filtered_results:
+
+            return {
+                "answer": (
+                    "I couldn't find sufficiently relevant "
+                    "information in the TravelOS knowledge base "
+                    "to answer this reliably."
+                ),
+                "sources": []
+            }
+
+
+        # ---------------------------------------------
+        # 5. Build context
+        # ---------------------------------------------
+
+        context = self._build_context(
+            filtered_results
+        )
+
+
+        # ---------------------------------------------
+        # 6. Build sources
+        # ---------------------------------------------
+
+        sources = [
+            self._build_source(result)
+            for result in filtered_results
+        ]
+
+
+        # ---------------------------------------------
+        # 7. Grounded LLM prompt
+        # ---------------------------------------------
 
         prompt = f"""
 You are the knowledge assistant for TravelOS.
 
-Answer the user's question using ONLY the
-provided travel knowledge.
+Your job is to answer the user's question using
+ONLY the retrieved travel knowledge below.
 
-Do not invent facts.
+STRICT RULES:
 
-If the provided knowledge does not contain
-enough information to answer the question,
-say that the available knowledge is insufficient.
+1. Do not invent facts.
+2. Do not use outside knowledge.
+3. Do not make assumptions that are not supported
+   by the retrieved knowledge.
+4. If the retrieved knowledge does not contain
+   enough information, clearly say so.
+5. Prefer information relevant to the requested
+   country, region, city, and category.
+6. Do not treat the similarity score as factual
+   information.
+7. Keep the answer clear and useful.
 
-User question:
+USER QUESTION:
+
 {question}
 
-Retrieved travel knowledge:
+
+RETRIEVED TRAVEL KNOWLEDGE:
+
 {context}
 
-Give a clear and useful answer.
+
+Answer the question using the retrieved knowledge.
 """
 
-        # -------------------------------------------------
-        # 5. Ask the LLM
-        # -------------------------------------------------
 
-        response = self.llm_service.generate_response(
-            prompt
+        # ---------------------------------------------
+        # 8. Generate answer
+        # ---------------------------------------------
+
+        response = (
+            self.llm_service.generate_response(
+                prompt
+            )
         )
+
+
+        # ---------------------------------------------
+        # 9. Return answer + sources
+        # ---------------------------------------------
 
         return {
             "answer": response,
             "sources": sources
         }
 
+
+    # =================================================
+    # RAG answer using TravelState
+    # =================================================
+
     def answer_with_state(
         self,
         question: str,
         state: TravelState,
-        top_k: int = 5
+        top_k: int = 5,
+        min_score: float = DEFAULT_MIN_SCORE
     ):
 
-        # -------------------------------------------------
+        # ---------------------------------------------
         # 1. Build RAG context from TravelState
-        # -------------------------------------------------
+        # ---------------------------------------------
 
         context = self.context_builder.build(
             state,
             question
         )
 
-        # -------------------------------------------------
+
+        # ---------------------------------------------
         # 2. Multi-destination retrieval
-        # -------------------------------------------------
+        # ---------------------------------------------
 
         results = self.retriever.search_multi(
             query=question,
@@ -151,9 +307,10 @@ Give a clear and useful answer.
             cities=context["cities"]
         )
 
-        # -------------------------------------------------
-        # 3. No knowledge found
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 3. No results
+        # ---------------------------------------------
 
         if not results:
 
@@ -165,86 +322,107 @@ Give a clear and useful answer.
                 "sources": []
             }
 
-        # -------------------------------------------------
-        # 4. Build knowledge context
-        # -------------------------------------------------
 
-        context_parts = []
-        sources = []
+        # ---------------------------------------------
+        # 4. Apply similarity threshold
+        # ---------------------------------------------
 
-        for result in results:
-
-            document = result["document"]
-
-            context_parts.append(
-                f"""
-SOURCE: {document.title or "Unknown"}
-
-COUNTRY: {document.country or "Unknown"}
-
-REGION: {document.region or "Unknown"}
-
-CITY: {document.city or "Unknown"}
-
-CATEGORY: {document.category or "Unknown"}
-
-CONTENT:
-{document.text}
-"""
+        filtered_results = (
+            self._filter_by_score(
+                results,
+                min_score
             )
-
-            sources.append({
-                "title": document.title,
-                "source": document.source,
-                "country": document.country,
-                "region": document.region,
-                "city": document.city,
-                "category": document.category,
-                "score": result["score"]
-            })
-
-        knowledge = "\n\n".join(
-            context_parts
         )
 
-        # -------------------------------------------------
-        # 5. Create grounded prompt
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 5. No sufficiently relevant knowledge
+        # ---------------------------------------------
+
+        if not filtered_results:
+
+            return {
+                "answer": (
+                    "I couldn't find sufficiently relevant "
+                    "travel knowledge to answer this reliably."
+                ),
+                "sources": []
+            }
+
+
+        # ---------------------------------------------
+        # 6. Build knowledge context
+        # ---------------------------------------------
+
+        knowledge = self._build_context(
+            filtered_results
+        )
+
+
+        # ---------------------------------------------
+        # 7. Build sources
+        # ---------------------------------------------
+
+        sources = [
+            self._build_source(result)
+            for result in filtered_results
+        ]
+
+
+        # ---------------------------------------------
+        # 8. Grounded prompt
+        # ---------------------------------------------
 
         prompt = f"""
 You are the TravelOS travel knowledge assistant.
 
-Answer the user's question using the retrieved
+Answer the user's question using ONLY the retrieved
 travel knowledge below.
 
 The user's trip may contain multiple destinations.
 
-Do not invent facts.
+STRICT RULES:
 
-If the retrieved knowledge does not contain
-enough information, clearly say that the available
-knowledge is insufficient.
+1. Do not invent facts.
+2. Do not use outside knowledge.
+3. Use only information supported by the retrieved
+   travel knowledge.
+4. If the knowledge is insufficient, clearly say so.
+5. Prefer information relevant to the user's
+   destinations.
+6. Do not treat similarity scores as factual
+   information.
+7. Give a clear and useful answer.
 
 USER QUESTION:
+
 {question}
 
+
 TRAVEL KNOWLEDGE:
+
 {knowledge}
 
-Give a clear, useful answer.
+
+Answer the user's question using the retrieved
+knowledge.
 """
 
-        # -------------------------------------------------
-        # 6. Generate answer
-        # -------------------------------------------------
 
-        response = self.llm_service.generate_response(
-            prompt
+        # ---------------------------------------------
+        # 9. Generate answer
+        # ---------------------------------------------
+
+        response = (
+            self.llm_service.generate_response(
+                prompt
+            )
         )
 
-        # -------------------------------------------------
-        # 7. Return answer + sources
-        # -------------------------------------------------
+
+        # ---------------------------------------------
+        # 10. Return answer + sources
+        # ---------------------------------------------
 
         return {
             "answer": response,

@@ -113,8 +113,9 @@ FALLBACK SEARCH URL:
 CONTENT:
 {document.text}
 
-SIMILARITY SCORE:
-{result["score"]:.4f}
+RETRIEVAL METADATA:
+This score is only used internally to estimate
+retrieval relevance. It is NOT travel information.
 """
             )
 
@@ -412,15 +413,35 @@ The user's trip may contain multiple destinations.
 STRICT RULES:
 
 1. Do not invent facts.
+
 2. Do not use outside knowledge.
-3. Use only information supported by the retrieved
-   travel knowledge.
-4. If the knowledge is insufficient, clearly say so.
-5. Prefer information relevant to the user's
-   destinations.
-6. Do not treat similarity scores as factual
-   information.
-7. Give a clear and useful answer.
+
+3. Use only information explicitly supported
+   by the retrieved travel knowledge.
+
+4. Prefer documents matching the user's requested
+   country, region, city, and category.
+
+5. Do not combine information from different
+   countries unless the user explicitly asks
+   for a comparison.
+
+6. If information for one requested destination
+   is missing, do not replace it with information
+   from another destination.
+
+7. If the retrieved knowledge is insufficient,
+   clearly say:
+
+   "The available TravelOS knowledge is
+   insufficient to answer this reliably."
+
+8. Do not treat similarity scores as factual
+   travel information.
+
+9. Do not invent or infer source information.
+
+10. Give a clear and useful answer.
 
 USER QUESTION:
 
@@ -430,8 +451,7 @@ TRAVEL KNOWLEDGE:
 
 {knowledge}
 
-Answer the user's question using the retrieved
-knowledge.
+Answer using only the retrieved knowledge.
 """
 
 

@@ -56,7 +56,79 @@ rag_service = rag_manager.get_rag_service()
 # =================================================
 # Chat Endpoint
 # =================================================
+def format_flight_results(
+    flights
+) -> str:
 
+    if not flights:
+
+        return (
+            "I couldn't find any flights "
+            "matching your search."
+        )
+
+    lines = [
+        "✈️ Recommended flights:"
+    ]
+
+    for index, flight in enumerate(
+        flights,
+        start=1
+    ):
+
+        lines.append(
+            f"\n{index}. "
+            f"{flight.provider or 'Unknown airline'}"
+        )
+
+        lines.append(
+            f"   {flight.origin} → "
+            f"{flight.destination}"
+        )
+
+        if flight.departure:
+
+            lines.append(
+                f"   Departure: "
+                f"{flight.departure}"
+            )
+
+        if flight.arrival:
+
+            lines.append(
+                f"   Arrival: "
+                f"{flight.arrival}"
+            )
+
+        if flight.duration_minutes is not None:
+
+            hours = (
+                flight.duration_minutes // 60
+            )
+
+            minutes = (
+                flight.duration_minutes % 60
+            )
+
+            lines.append(
+                f"   Duration: "
+                f"{hours}h {minutes}m"
+            )
+
+        lines.append(
+            f"   Stops: "
+            f"{flight.stops}"
+        )
+
+        if flight.price is not None:
+
+            lines.append(
+                f"   Price: "
+                f"{flight.price:.2f} "
+                f"{flight.currency or ''}"
+            )
+
+    return "\n".join(lines)
 @router.post(
     "",
     response_model=ChatResponse
@@ -237,6 +309,13 @@ def chat(
             f"Wind speed is "
             f"{result['wind_speed']} km/h."
         )
+            
+        elif query.category == "flight":
+            answer = format_flight_results(
+                result["recommended"]
+            )
+               
+            
 
         else:
 

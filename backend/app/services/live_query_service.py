@@ -1,4 +1,5 @@
 import re
+from app.services.flight_ranker import FlightRanker
 
 from app.services.currency_services import (
     CurrencyService
@@ -8,13 +9,18 @@ from app.services.weather_service import (
     WeatherService
 )
 
+from app.services.flight_service import (
+    FlightService
+)
+
 
 class LiveQueryService:
 
     def __init__(
         self,
         currency_service: CurrencyService | None = None,
-        weather_service: WeatherService | None = None
+        weather_service: WeatherService | None = None,
+        flight_service: FlightService | None = None
     ):
 
         # ---------------------------------------------
@@ -36,6 +42,17 @@ class LiveQueryService:
             weather_service
             if weather_service
             else WeatherService()
+        )
+
+
+        # ---------------------------------------------
+        # Flights
+        # ---------------------------------------------
+
+        self.flight_service = (
+            flight_service
+            if flight_service
+            else FlightService()
         )
 
 
@@ -80,6 +97,30 @@ class LiveQueryService:
 
         return self.weather_service.get_current_weather(
             city
+        )
+
+
+    # =================================================
+    # Flights
+    # =================================================
+
+    def search_flights(
+        self,
+        origin: str,
+        destination: str,
+        departure_date: str,
+        passengers: int = 1,
+        cabin_class: str = "economy",
+        max_connections: int = 1
+    ):
+
+        return self.flight_service.search_flights(
+            origin=origin,
+            destination=destination,
+            departure_date=departure_date,
+            passengers=passengers,
+            cabin_class=cabin_class,
+            max_connections=max_connections
         )
 
 
@@ -130,6 +171,64 @@ class LiveQueryService:
 
 
         # ---------------------------------------------
+        # FLIGHTS
+        # ---------------------------------------------
+
+        if query.category == "flight":
+
+            if not query.origin:
+
+                raise ValueError(
+                    "An origin is required for flight search."
+                )
+
+            if not query.destination:
+
+                raise ValueError(
+                    "A destination is required for flight search."
+                )
+
+            if not query.departure_date:
+
+                raise ValueError(
+                    "A departure date is required "
+                    "for flight search."
+                )
+
+            flights =  self.search_flights(
+                origin=query.origin,
+                destination=query.destination,
+                departure_date=query.departure_date,
+                passengers=(
+                    query.passengers
+                    if query.passengers
+                    else 1
+                ),
+                cabin_class=(
+                    query.cabin_class
+                    if query.cabin_class
+                    else "economy"
+                ),
+                max_connections=(
+                    query.max_connections
+                    if query.max_connections is not None
+                    else 1
+                )
+            )
+            
+            # rank flights
+            
+            return {
+                "all" : flights,
+                "cheapest" : FlightRanker.cheapest(flights , limit=5),
+                "fastest" : FlightRanker.fastest(flights , limit=5) , 
+                "fewest_stops" : FlightRanker.fewest_stops(flights , limit=5),
+                "recommended" : FlightRanker.balanced(flights , limit=5)
+                
+            }
+
+
+        # ---------------------------------------------
         # Unsupported live category
         # ---------------------------------------------
 
@@ -147,10 +246,6 @@ class LiveQueryService:
         self,
         question: str
     ) -> tuple[str, str]:
-
-        # ---------------------------------------------
-        # Common currency codes
-        # ---------------------------------------------
 
         currency_codes = {
             "USD",
@@ -176,10 +271,6 @@ class LiveQueryService:
         }
 
 
-        # ---------------------------------------------
-        # Find currency codes
-        # ---------------------------------------------
-
         found = re.findall(
             r"\b[A-Z]{3}\b",
             question.upper()
@@ -193,10 +284,6 @@ class LiveQueryService:
         ]
 
 
-        # ---------------------------------------------
-        # Require two currencies
-        # ---------------------------------------------
-
         if len(found) >= 2:
 
             return (
@@ -204,10 +291,6 @@ class LiveQueryService:
                 found[1]
             )
 
-
-        # ---------------------------------------------
-        # Currency symbols / names
-        # ---------------------------------------------
 
         question_lower = question.lower()
 
@@ -241,10 +324,6 @@ class LiveQueryService:
             )
 
 
-        # ---------------------------------------------
-        # Cannot determine currencies
-        # ---------------------------------------------
-
         raise ValueError(
             "Could not determine the base and "
             "target currencies from the question. "
@@ -262,3 +341,5 @@ class LiveQueryService:
         self.currency_service.close()
 
         self.weather_service.close()
+
+        self.flight_service.close()

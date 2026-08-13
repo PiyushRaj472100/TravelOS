@@ -119,6 +119,7 @@ Use only one of these categories:
 - visa
 - regulations
 - transportation
+- flight
 - accommodation
 - restaurants
 - activities
@@ -185,6 +186,31 @@ Examples:
 
 "What are Japanese customs?"
 → false
+
+
+
+
+FLIGHT LIVE DATA RULE
+=====================
+
+For flight search queries:
+
+needs_live_data = true
+
+because flight availability, schedules,
+and prices must be obtained from the
+live flight provider.
+
+Examples:
+
+"Find flights from London to Dubai."
+→ needs_live_data = true
+
+"Find cheap flights from Delhi to Tokyo."
+→ needs_live_data = true
+
+"Are there flights from Paris to Rome?"
+→ needs_live_data = true
 
 
 IMPORTANT:
@@ -261,7 +287,72 @@ Use "destination_information" for general
 destination knowledge.
 
 Use "general" when no other category is appropriate.
+Use "flight" for:
 
+- flight search
+- airline tickets
+- air tickets
+- flights between destinations
+- finding available flights
+- comparing flight options
+- cheap flights
+- direct flights
+- connecting flights
+
+Use "flight" for questions specifically asking
+to search, find, compare, or check flights or
+air tickets.
+
+Examples:
+
+"Find flights from London to Dubai."
+→ category: "flight"
+
+"Are there flights from Delhi to Tokyo?"
+→ category: "flight"
+
+"Find cheap flights from Paris to Rome."
+→ category: "flight"
+
+"Show me flights from London to Dubai tomorrow."
+→ category: "flight"
+
+
+# FLIGHT DATA EXTRACTION
+=========================
+
+When the category is "flight", extract the following
+information when explicitly available:
+
+origin:
+The departure airport or city.
+
+destination:
+The arrival airport or city.
+
+departure_date:
+The requested departure date.
+
+passengers:
+Number of travelers if explicitly mentioned.
+Otherwise use 1.
+
+cabin_class:
+Use one of:
+- economy
+- premium_economy
+- business
+- first
+
+If not specified, use:
+economy
+
+max_connections:
+Maximum number of connections if explicitly
+specified.
+
+If not specified, use:
+1
 
 # IMPORTANT INTERACTION RULE
 =============================
@@ -316,6 +407,9 @@ This takes priority for routing to the live
 information system.
 
 
+
+
+
 # OUTPUT
 =========
 
@@ -332,13 +426,20 @@ User question:
 JSON format:
 
 {{
-    "question": "{question}",
+     "question": "{question}",
     "category": "...",
     "countries": [],
     "regions": [],
     "cities": [],
     "needs_live_data": false,
-    "query_type": "planning"
+    "query_type": "planning",
+
+    "origin": null,
+    "destination": null,
+    "departure_date": null,
+    "passengers": 1,
+    "cabin_class": "economy",
+    "max_connections": 1
 }}
 """
 

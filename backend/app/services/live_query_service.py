@@ -177,28 +177,22 @@ class LiveQueryService:
         if query.category == "flight":
 
             if not query.origin:
-
                 raise ValueError(
                     "An origin is required for flight search."
                 )
 
             if not query.destination:
-
                 raise ValueError(
                     "A destination is required for flight search."
                 )
 
-            if not query.departure_date:
+            from datetime import date, timedelta
+            departure_date = query.departure_date or (date.today() + timedelta(days=30)).strftime("%Y-%m-%d")
 
-                raise ValueError(
-                    "A departure date is required "
-                    "for flight search."
-                )
-
-            flights =  self.search_flights(
+            flights = self.search_flights(
                 origin=query.origin,
                 destination=query.destination,
-                departure_date=query.departure_date,
+                departure_date=departure_date,
                 passengers=(
                     query.passengers
                     if query.passengers
@@ -229,6 +223,15 @@ class LiveQueryService:
 
 
         # ---------------------------------------------
+        # ACCOMMODATION (Delegated to HotelAgent)
+        # ---------------------------------------------
+        if query.category == "accommodation":
+            return {
+                "type": "accommodation",
+                "status": "delegated_to_hotel_agent"
+            }
+
+        # ---------------------------------------------
         # Unsupported live category
         # ---------------------------------------------
 
@@ -247,88 +250,43 @@ class LiveQueryService:
         question: str
     ) -> tuple[str, str]:
 
-        currency_codes = {
-            "USD",
-            "EUR",
-            "GBP",
-            "INR",
-            "JPY",
-            "AUD",
-            "CAD",
-            "CHF",
-            "CNY",
-            "SGD",
-            "AED",
-            "NZD",
-            "HKD",
-            "KRW",
-            "THB",
-            "MYR",
-            "IDR",
-            "ZAR",
-            "TRY",
-            "SAR"
+        currency_map = {
+            "usd": "USD", "dollar": "USD", "dollars": "USD", "$": "USD",
+            "eur": "EUR", "euro": "EUR", "euros": "EUR", "€": "EUR",
+            "gbp": "GBP", "pound": "GBP", "pounds": "GBP", "£": "GBP",
+            "inr": "INR", "rupee": "INR", "rupees": "INR", "₹": "INR",
+            "jpy": "JPY", "yen": "JPY", "¥": "JPY",
+            "aud": "AUD", "cad": "CAD", "chf": "CHF", "cny": "CNY",
+            "sgd": "SGD", "aed": "AED", "nzd": "NZD", "hkd": "HKD",
+            "krw": "KRW", "thb": "THB", "myr": "MYR", "idr": "IDR",
+            "zar": "ZAR", "try": "TRY", "sar": "SAR"
         }
 
-
-        found = re.findall(
-            r"\b[A-Z]{3}\b",
-            question.upper()
-        )
-
-
-        found = [
-            currency
-            for currency in found
-            if currency in currency_codes
-        ]
-
-
-        if len(found) >= 2:
-
-            return (
-                found[0],
-                found[1]
-            )
-
-
-        question_lower = question.lower()
-
-        currency_names = {
-            "rupees": "INR",
-            "rupee": "INR",
-            "dollars": "USD",
-            "dollar": "USD",
-            "euros": "EUR",
-            "euro": "EUR",
-            "pounds": "GBP",
-            "pound": "GBP",
-            "yen": "JPY"
-        }
-
-
-        detected = []
-
-        for name, code in currency_names.items():
-
-            if name in question_lower:
-
-                detected.append(code)
-
+        # Find tokens by scanning in word order
+        detected: list[str] = []
+        tokens = re.findall(r"[\$€£¥₹]|\b[A-Za-z]+\b", question)
+        
+        for token in tokens:
+            key = token.lower()
+            if key in currency_map:
+                code = currency_map[key]
+                if not detected or detected[-1] != code:
+                    detected.append(code)
 
         if len(detected) >= 2:
+            return (detected[0], detected[1])
 
-            return (
-                detected[0],
-                detected[1]
-            )
-
+        # If only 1 currency detected and it's USD, default target to EUR or vice versa
+        if len(detected) == 1:
+            if detected[0] != "USD":
+                return ("USD", detected[0])
+            return ("USD", "EUR")
 
         raise ValueError(
             "Could not determine the base and "
             "target currencies from the question. "
             "Please specify two currencies, such as "
-            "'INR to EUR'."
+            "'USD to JPY'."
         )
 
 

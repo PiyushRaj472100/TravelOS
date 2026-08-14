@@ -35,43 +35,46 @@ class QueryRouter:
         # ---------------------------------------------
 
         if query.needs_live_data:
-
             return "live"
 
+        # ---------------------------------------------
+        # 2. Knowledge queries / specific RAG categories
+        # ---------------------------------------------
+
+        if query.query_type == "knowledge":
+            return "rag"
+
+        # Knowledge categories take priority for informational topics
+        if query.category in {
+            "safety",
+            "regulations",
+            "visa",
+            "entry_requirements",
+            "culture",
+            "packing",
+            "destination_information",
+        }:
+            return "rag"
 
         # ---------------------------------------------
-        # 2. Planning intent
+        # 3. Planning intent
         # ---------------------------------------------
 
         if query.query_type == "planning":
-
             return "planning"
 
-
         # ---------------------------------------------
-        # 3. Knowledge categories
+        # 4. Other Knowledge / Live categories fallback
         # ---------------------------------------------
 
         if query.category in self.RAG_CATEGORIES:
-
             return "rag"
-
-
-        # ---------------------------------------------
-        # 4. Live categories
-        #
-        # If category is naturally live but the user
-        # didn't explicitly request current information,
-        # we treat it as knowledge where possible.
-        # ---------------------------------------------
 
         if query.category in self.LIVE_CATEGORIES:
-
             return "rag"
-
 
         # ---------------------------------------------
         # 5. Safe fallback
         # ---------------------------------------------
 
-        return "rag"
+        return "rag"

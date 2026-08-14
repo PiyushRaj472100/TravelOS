@@ -1,0 +1,284 @@
+.msg-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: 4px 0;
+}
+
+.msg-user {
+  flex-direction: row-reverse;
+}
+
+/* Avatar */
+.msg-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.msg-avatar-ai {
+  background: var(--gradient-brand);
+  color: white;
+  box-shadow: var(--shadow-brand);
+}
+
+.msg-avatar-user {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+}
+
+/* Bubble */
+.msg-bubble {
+  max-width: 80%;
+  min-width: 60px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+
+.msg-assistant .msg-bubble {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-top-left-radius: 4px;
+}
+
+.msg-user .msg-bubble {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-top-right-radius: 4px;
+}
+
+.msg-bubble.msg-error {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+/* Text */
+.msg-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+  word-break: break-word;
+}
+
+.msg-text-ai strong { color: var(--text-primary); font-weight: 600; }
+.msg-text-ai em { color: var(--text-accent); font-style: italic; }
+.msg-text-ai code {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--brand-accent);
+}
+.msg-text-ai ul {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-5);
+}
+.msg-text-ai li { margin: 2px 0; }
+
+/* Sources */
+.msg-sources {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.msg-sources-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+.msg-sources-toggle:hover { color: var(--text-accent); }
+
+.msg-sources-list {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msg-source-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+}
+
+.msg-source-item a {
+  color: var(--text-accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.msg-source-tag {
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* Footer */
+.msg-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  gap: var(--space-3);
+}
+
+.msg-time {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.msg-retry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: var(--brand-rose);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+.msg-retry:hover { background: rgba(244, 63, 94, 0.1); }
+
+/* ----------------------------------------------------------------
+   Markdown Headings inside AI bubbles
+---------------------------------------------------------------- */
+.msg-text-ai .md-h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: var(--space-3) 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+.msg-text-ai .md-h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: var(--space-3) 0 var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 4px;
+}
+.msg-text-ai .md-link {
+  color: var(--text-accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity var(--transition-fast);
+}
+.msg-text-ai .md-link:hover { opacity: 0.75; }
+
+/* ----------------------------------------------------------------
+   Place Image Card (rendered from Markdown ![]() in AI messages)
+---------------------------------------------------------------- */
+.place-img-card {
+  margin: var(--space-3) 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  max-width: 480px;
+}
+.place-img-card img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.place-img-card img:hover {
+  transform: scale(1.03);
+}
+
+/* ----------------------------------------------------------------
+   CTA — "Generate My Complete Itinerary" Button
+---------------------------------------------------------------- */
+.cta-generate-wrapper {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+@keyframes cta-glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(99, 102, 241, 0.55), 0 4px 24px rgba(168, 85, 247, 0.35); }
+  50%       { box-shadow: 0 0 22px rgba(99, 102, 241, 0.85), 0 4px 32px rgba(168, 85, 247, 0.55); }
+}
+
+.cta-generate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 60%, #ec4899 100%);
+  animation: cta-glow-pulse 2.4s ease-in-out infinite;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.cta-generate-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 70%);
+  border-radius: inherit;
+}
+.cta-generate-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  opacity: 0.95;
+}
+.cta-generate-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.cta-sparkle-icon {
+  flex-shrink: 0;
+  animation: spin 3s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.cta-generate-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+  padding-left: 2px;
+}
+

@@ -52,6 +52,7 @@ class TravelState(BaseModel):
     current_day: Optional[int] = None
     selected_location: Optional[Dict[str, Any]] = None
     selected_route: Optional[Dict[str, Any]] = None
+    cta_shown: bool = False
     
     
     locations: list[GeoLocation] = []

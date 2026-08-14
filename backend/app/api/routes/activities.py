@@ -1,1 +1,0 @@
-"""Activity API routes."""

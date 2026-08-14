@@ -1,1 +1,0 @@
-"""Packing assistant agent."""

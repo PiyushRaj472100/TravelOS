@@ -936,7 +936,74 @@ class AirportService:
             "name": "Phu Quoc",
             "code": "PQC",
             "type": "city"
-        }
+        },
+
+        # =================================================
+        # India
+        # =================================================
+        "delhi": {"name": "Indira Gandhi International Airport, Delhi", "code": "DEL", "type": "city"},
+        "new delhi": {"name": "Indira Gandhi International Airport, Delhi", "code": "DEL", "type": "city"},
+        "mumbai": {"name": "Chhatrapati Shivaji Maharaj International Airport, Mumbai", "code": "BOM", "type": "city"},
+        "bombay": {"name": "Mumbai", "code": "BOM", "type": "city"},
+        "bangalore": {"name": "Kempegowda International Airport, Bengaluru", "code": "BLR", "type": "city"},
+        "bengaluru": {"name": "Bengaluru", "code": "BLR", "type": "city"},
+        "hyderabad": {"name": "Rajiv Gandhi International Airport, Hyderabad", "code": "HYD", "type": "city"},
+        "chennai": {"name": "Chennai International Airport", "code": "MAA", "type": "city"},
+        "kolkata": {"name": "Netaji Subhash Chandra Bose International Airport, Kolkata", "code": "CCU", "type": "city"},
+        "goa": {"name": "Goa International Airport", "code": "GOI", "type": "city"},
+        "ahmedabad": {"name": "Sardar Vallabhbhai Patel International Airport, Ahmedabad", "code": "AMD", "type": "city"},
+        "jaipur": {"name": "Jaipur International Airport", "code": "JAI", "type": "city"},
+        "kochi": {"name": "Cochin International Airport", "code": "COK", "type": "city"},
+
+        # =================================================
+        # Japan
+        # =================================================
+        "tokyo": {"name": "Tokyo (Haneda / Narita)", "code": "HND", "type": "city"},
+        "haneda": {"name": "Tokyo Haneda Airport", "code": "HND", "type": "airport"},
+        "narita": {"name": "Tokyo Narita Airport", "code": "NRT", "type": "airport"},
+        "osaka": {"name": "Kansai International Airport, Osaka", "code": "KIX", "type": "city"},
+        "kyoto": {"name": "Osaka / Kyoto (Kansai)", "code": "KIX", "type": "city"},
+        "kansai": {"name": "Kansai International Airport", "code": "KIX", "type": "airport"},
+        "sapporo": {"name": "New Chitose Airport, Sapporo", "code": "CTS", "type": "city"},
+        "fukuoka": {"name": "Fukuoka Airport", "code": "FUK", "type": "city"},
+        "nagoya": {"name": "Chubu Centrair International Airport, Nagoya", "code": "NGO", "type": "city"},
+
+        # =================================================
+        # Middle East & Global Hubs
+        # =================================================
+        "dubai": {"name": "Dubai International Airport", "code": "DXB", "type": "city"},
+        "abu dhabi": {"name": "Abu Dhabi International Airport", "code": "AUH", "type": "city"},
+        "doha": {"name": "Hamad International Airport, Doha", "code": "DOH", "type": "city"},
+        "singapore": {"name": "Singapore Changi Airport", "code": "SIN", "type": "city"},
+        "bangkok": {"name": "Suvarnabhumi Airport, Bangkok", "code": "BKK", "type": "city"},
+        "phuket": {"name": "Phuket International Airport", "code": "HKT", "type": "city"},
+        "bali": {"name": "Ngurah Rai International Airport, Bali", "code": "DPS", "type": "city"},
+        "denpasar": {"name": "Bali Denpasar", "code": "DPS", "type": "city"},
+        "kuala lumpur": {"name": "Kuala Lumpur International Airport", "code": "KUL", "type": "city"},
+        "hong kong": {"name": "Hong Kong International Airport", "code": "HKG", "type": "city"},
+        "seoul": {"name": "Incheon International Airport, Seoul", "code": "ICN", "type": "city"},
+        "incheon": {"name": "Seoul Incheon", "code": "ICN", "type": "airport"},
+        "male": {"name": "Velana International Airport, Maldives", "code": "MLE", "type": "city"},
+        "maldives": {"name": "Maldives", "code": "MLE", "type": "city"},
+        "kathmandu": {"name": "Tribhuvan International Airport, Kathmandu", "code": "KTM", "type": "city"},
+        "colombo": {"name": "Bandaranaike International Airport, Colombo", "code": "CMB", "type": "city"},
+
+        # =================================================
+        # UK, Europe, Americas
+        # =================================================
+        "london": {"name": "London Heathrow", "code": "LHR", "type": "city"},
+        "heathrow": {"name": "London Heathrow Airport", "code": "LHR", "type": "airport"},
+        "paris": {"name": "Paris Charles de Gaulle", "code": "CDG", "type": "city"},
+        "rome": {"name": "Rome Fiumicino Airport", "code": "FCO", "type": "city"},
+        "frankfurt": {"name": "Frankfurt Airport", "code": "FRA", "type": "city"},
+        "amsterdam": {"name": "Amsterdam Airport Schiphol", "code": "AMS", "type": "city"},
+        "zurich": {"name": "Zurich Airport", "code": "ZRH", "type": "city"},
+        "madrid": {"name": "Adolfo Suárez Madrid–Barajas Airport", "code": "MAD", "type": "city"},
+        "barcelona": {"name": "Josep Tarradellas Barcelona-El Prat Airport", "code": "BCN", "type": "city"},
+        "new york": {"name": "John F. Kennedy International Airport, New York", "code": "JFK", "type": "city"},
+        "san francisco": {"name": "San Francisco International Airport", "code": "SFO", "type": "city"},
+        "los angeles": {"name": "Los Angeles International Airport", "code": "LAX", "type": "city"},
+        "chicago": {"name": "O'Hare International Airport, Chicago", "code": "ORD", "type": "city"}
     }
 
 
@@ -958,14 +1025,25 @@ class AirportService:
         )
 
         # ---------------------------------------------
+        # Extract code from parentheses like "Delhi (DEL)"
+        # ---------------------------------------------
+        import re
+        paren_match = re.search(r'\(([a-zA-Z]{3})\)', location)
+        if paren_match:
+            code = paren_match.group(1).upper()
+            return AirportLocation(
+                name=location,
+                code=code,
+                location_type="airport_or_city_code"
+            )
+
+        # ---------------------------------------------
         # Already an IATA code
         # ---------------------------------------------
-
         if (
             len(normalized) == 3
             and normalized.isalpha()
         ):
-
             return AirportLocation(
                 name=location.upper(),
                 code=location.upper(),
@@ -973,15 +1051,10 @@ class AirportService:
             )
 
         # ---------------------------------------------
-        # Known location
+        # Direct lookup
         # ---------------------------------------------
-
-        data = cls.AIRPORTS.get(
-            normalized
-        )
-
+        data = cls.AIRPORTS.get(normalized)
         if data:
-
             return AirportLocation(
                 name=data["name"],
                 code=data["code"],
@@ -989,10 +1062,21 @@ class AirportService:
             )
 
         # ---------------------------------------------
-        # Unknown location
+        # Substring / partial match
         # ---------------------------------------------
+        for key, val in cls.AIRPORTS.items():
+            if key in normalized or normalized in key:
+                return AirportLocation(
+                    name=val["name"],
+                    code=val["code"],
+                    location_type=val["type"]
+                )
 
-        raise ValueError(
-            f"Could not resolve '{location}' "
-            f"to a supported airport or city."
+        # ---------------------------------------------
+        # Default safe fallback for unknown
+        # ---------------------------------------------
+        return AirportLocation(
+            name=location.title(),
+            code=normalized[:3].upper(),
+            location_type="city"
         )

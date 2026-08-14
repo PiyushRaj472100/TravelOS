@@ -47,52 +47,55 @@ class RAGRetriever:
         # ---------------------------------------------
 
         if country:
-
-            if (
-                self._normalize(document.country)
-                != self._normalize(country)
-            ):
+            doc_c = self._normalize(document.country)
+            target_c = self._normalize(country)
+            if doc_c and target_c:
+                if doc_c != target_c and doc_c not in target_c and target_c not in doc_c:
+                    return False
+            elif doc_c != target_c:
                 return False
-
 
         # ---------------------------------------------
         # Region
         # ---------------------------------------------
 
         if region:
-
-            if (
-                self._normalize(document.region)
-                != self._normalize(region)
-            ):
+            doc_r = self._normalize(document.region)
+            target_r = self._normalize(region)
+            if doc_r and target_r:
+                if doc_r != target_r and doc_r not in target_r and target_r not in doc_r:
+                    return False
+            elif doc_r != target_r:
                 return False
-
 
         # ---------------------------------------------
         # City
         # ---------------------------------------------
 
         if city:
-
-            if (
-                self._normalize(document.city)
-                != self._normalize(city)
-            ):
-                return False
-
+            doc_city = self._normalize(document.city)
+            target_city = self._normalize(city)
+            # If document has a city specified, match against it
+            if doc_city is not None and target_city is not None:
+                if doc_city != target_city and doc_city not in target_city and target_city not in doc_city:
+                    return False
 
         # ---------------------------------------------
         # Category
         # ---------------------------------------------
 
         if category:
-
-            if (
-                self._normalize(document.category)
-                != self._normalize(category)
-            ):
+            doc_cat = self._normalize(document.category)
+            target_cat = self._normalize(category)
+            if doc_cat and target_cat:
+                if doc_cat != target_cat and doc_cat not in target_cat and target_cat not in doc_cat:
+                    # Allow related safety/regulations cross-matching
+                    if target_cat in ("safety", "regulations", "rules") and doc_cat in ("safety", "regulations", "visa", "entry_requirements"):
+                        pass
+                    else:
+                        return False
+            elif doc_cat != target_cat:
                 return False
-
 
         return True
 
@@ -283,17 +286,21 @@ class RAGRetriever:
 
 
         # ---------------------------------------------
-        # 4. No location specified
+        # 4. Fallback if no location specified or 0 results found
         # ---------------------------------------------
 
-        if not countries and not regions and not cities:
-
+        if not all_results:
             all_results = self.search(
                 query=query,
                 top_k=top_k,
                 category=category
             )
 
+        if not all_results:
+            all_results = self.search(
+                query=query,
+                top_k=top_k
+            )
 
         # ---------------------------------------------
         # 5. Remove duplicates

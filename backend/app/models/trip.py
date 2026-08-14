@@ -1,1 +1,0 @@
-"""Trip domain model."""

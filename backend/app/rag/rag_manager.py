@@ -37,9 +37,12 @@ class RAGManager:
         # Persistent storage paths
         # =============================================
 
-        self.storage_dir = Path(
-            "data/vector_store"
-        )
+        backend_dir = Path(__file__).resolve().parents[2]
+        default_storage = backend_dir / "data" / "vector_store"
+        if default_storage.exists():
+            self.storage_dir = default_storage
+        else:
+            self.storage_dir = Path("data/vector_store").resolve()
 
         self.faiss_path = (
             self.storage_dir

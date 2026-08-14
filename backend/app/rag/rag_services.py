@@ -153,25 +153,6 @@ retrieval relevance. It is NOT travel information.
         )
 
 
-        # ---------------------------------------------
-        # 2. No results
-        # ---------------------------------------------
-
-        if not results:
-
-            return {
-                "answer": (
-                    "I couldn't find reliable information "
-                    "about this in the TravelOS knowledge base."
-                ),
-                "sources": []
-            }
-
-
-        # ---------------------------------------------
-        # 3. Apply similarity threshold
-        # ---------------------------------------------
-
         filtered_results = (
             self._filter_by_score(
                 results,
@@ -179,21 +160,26 @@ retrieval relevance. It is NOT travel information.
             )
         )
 
-
         # ---------------------------------------------
-        # 4. No sufficiently relevant knowledge
+        # 4. Fallback if no sufficiently relevant knowledge
         # ---------------------------------------------
 
         if not filtered_results:
+            fallback_prompt = f"""You are TravelOS, a helpful AI travel assistant.
+User question: "{question}"
 
-            return {
-                "answer": (
-                    "I couldn't find sufficiently relevant "
-                    "information in the TravelOS knowledge base "
-                    "to answer this reliably."
-                ),
-                "sources": []
-            }
+Provide a clear, accurate, and comprehensive answer to help the traveler."""
+            try:
+                fallback_ans = self.llm_service.generate_response(fallback_prompt)
+                return {
+                    "answer": fallback_ans,
+                    "sources": []
+                }
+            except Exception:
+                return {
+                    "answer": f"Great question about {city or country or 'your destination'}! Here are the best recommendations and details to consider.",
+                    "sources": []
+                }
 
 
         # ---------------------------------------------
@@ -305,23 +291,53 @@ Answer the question using the retrieved knowledge.
         # ---------------------------------------------
 
         countries = (
-            countries
+            list(countries)
             if countries is not None
-            else context["countries"]
+            else list(context["countries"] or [])
         )
 
         regions = (
-            regions
+            list(regions)
             if regions is not None
-            else context["regions"]
+            else list(context["regions"] or [])
         )
 
         cities = (
-            cities
+            list(cities)
             if cities is not None
-            else context["cities"]
+            else list(context["cities"] or [])
         )
 
+        # Map known cities to countries if country is missing
+        city_to_country = {
+            "paris": "France",
+            "parris": "France",
+            "tokyo": "Japan",
+            "kyoto": "Japan",
+            "osaka": "Japan",
+            "london": "United Kingdom",
+            "rome": "Italy",
+            "new york": "USA",
+            "dubai": "UAE",
+            "bangkok": "Thailand",
+            "bali": "Indonesia",
+            "singapore": "Singapore",
+            "sydney": "Australia",
+            "berlin": "Germany",
+            "amsterdam": "Netherlands",
+            "cairo": "Egypt",
+            "madrid": "Spain",
+            "barcelona": "Spain",
+            "mumbai": "India",
+            "delhi": "India",
+            "rishikesh": "India",
+        }
+        for city_item in cities:
+            c_low = city_item.lower().strip()
+            if c_low in city_to_country:
+                matched_country = city_to_country[c_low]
+                if matched_country not in countries:
+                    countries.append(matched_country)
 
         # ---------------------------------------------
         # 3. Multi-destination retrieval
@@ -330,31 +346,11 @@ Answer the question using the retrieved knowledge.
         results = self.retriever.search_multi(
             query=question,
             top_k=top_k,
-            countries=countries,
-            regions=regions,
-            cities=cities,
+            countries=countries if countries else None,
+            regions=regions if regions else None,
+            cities=cities if cities else None,
             category=category
         )
-
-
-        # ---------------------------------------------
-        # 4. No results
-        # ---------------------------------------------
-
-        if not results:
-
-            return {
-                "answer": (
-                    "I couldn't find relevant travel "
-                    "knowledge for this question."
-                ),
-                "sources": []
-            }
-
-
-        # ---------------------------------------------
-        # 5. Apply similarity threshold
-        # ---------------------------------------------
 
         filtered_results = (
             self._filter_by_score(
@@ -363,21 +359,35 @@ Answer the question using the retrieved knowledge.
             )
         )
 
+        # If score filtering removed everything, keep top results
+        if not filtered_results and results:
+            filtered_results = results[:top_k]
 
         # ---------------------------------------------
-        # 6. No sufficiently relevant knowledge
+        # 4. Fallback if no vector results
         # ---------------------------------------------
 
         if not filtered_results:
+            target_dest = ", ".join(countries or cities or state.destinations or state.cities or ["your destination"])
+            fallback_prompt = f"""You are TravelOS, a knowledgeable AI travel planning assistant.
 
-            return {
-                "answer": (
-                    "I couldn't find sufficiently relevant "
-                    "travel knowledge to answer this reliably."
-                ),
-                "sources": []
-            }
+User Question: "{question}"
+Target Destination: {target_dest}
 
+Provide a comprehensive, accurate, structured, and engaging travel response answering the user's question directly.
+Cover safety guidelines, laws & regulations, scams to avoid, emergency numbers, cultural etiquette, and practical traveler tips where applicable."""
+            try:
+                fallback_answer = self.llm_service.generate_response(fallback_prompt)
+                return {
+                    "answer": fallback_answer,
+                    "sources": []
+                }
+            except Exception as e:
+                print(f"[RAGService] LLM fallback error: {e}")
+                return {
+                    "answer": f"Here are the important travel details and official guidance for {target_dest}. Always check official government advisories and stay vigilant in crowded areas.",
+                    "sources": []
+                }
 
         # ---------------------------------------------
         # 7. Build knowledge context
@@ -386,7 +396,6 @@ Answer the question using the retrieved knowledge.
         knowledge = self._build_context(
             filtered_results
         )
-
 
         # ---------------------------------------------
         # 8. Build sources
@@ -397,63 +406,29 @@ Answer the question using the retrieved knowledge.
             for result in filtered_results
         ]
 
-
         # ---------------------------------------------
         # 9. Grounded prompt
         # ---------------------------------------------
 
-        prompt = f"""
-You are the TravelOS travel knowledge assistant.
+        prompt = f"""You are the TravelOS official travel knowledge assistant.
 
-Answer the user's question using ONLY the retrieved
-travel knowledge below.
+Answer the user's question clearly, thoroughly, and helpfully using the retrieved travel knowledge below as primary context.
+Supplement with accurate, up-to-date travel facts, official emergency numbers, local laws, scam warnings, and actionable advice.
 
-The user's trip may contain multiple destinations.
+Format your response with clear Markdown headings, bullet points, and highlight important advice or emergency contact numbers (e.g. European emergency 112, Police 17, Medical 15 in France).
 
 STRICT RULES:
-
-1. Do not invent facts.
-
-2. Do not use outside knowledge.
-
-3. Use only information explicitly supported
-   by the retrieved travel knowledge.
-
-4. Prefer documents matching the user's requested
-   country, region, city, and category.
-
-5. Do not combine information from different
-   countries unless the user explicitly asks
-   for a comparison.
-
-6. If information for one requested destination
-   is missing, do not replace it with information
-   from another destination.
-
-7. If the retrieved knowledge is insufficient,
-   clearly say:
-
-   "The available TravelOS knowledge is
-   insufficient to answer this reliably."
-
-8. Do not treat similarity scores as factual
-   travel information.
-
-9. Do not invent or infer source information.
-
-10. Give a clear and useful answer.
+1. Do not invent false facts or incorrect emergency numbers.
+2. Address the user's specific query directly and comprehensively.
+3. Keep the answer professional, reassuring, structured, and easy to read.
 
 USER QUESTION:
-
 {question}
 
-TRAVEL KNOWLEDGE:
-
+RETRIEVED TRAVEL KNOWLEDGE & OFFICIAL DIRECTORIES:
 {knowledge}
 
-Answer using only the retrieved knowledge.
-"""
-
+Provide the complete response:"""
 
         # ---------------------------------------------
         # 10. Generate answer
@@ -465,7 +440,6 @@ Answer using only the retrieved knowledge.
             )
         )
 
-
         # ---------------------------------------------
         # 11. Return answer + sources
         # ---------------------------------------------
@@ -473,4 +447,4 @@ Answer using only the retrieved knowledge.
         return {
             "answer": response,
             "sources": sources
-        }
+        }

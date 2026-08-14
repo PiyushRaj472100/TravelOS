@@ -3,7 +3,7 @@
 
 import type { ChatRequest, ChatResponse } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8000';
+const API_BASE = (import.meta.env.VITE_API_URL as string) || '';
 
 // ----------------------------------------------------------------
 // Generic request helper
@@ -47,7 +47,7 @@ export async function sendMessage(payload: ChatRequest): Promise<ChatResponse> {
 // ----------------------------------------------------------------
 export async function healthCheck(): Promise<boolean> {
   try {
-    await request<{ status: string }>('/');
+    await request<{ status: string }>('/healthz');
     return true;
   } catch {
     return false;

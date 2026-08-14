@@ -9,6 +9,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
+
 # =============================================
 # CORS — allow frontend dev server + production
 # =============================================

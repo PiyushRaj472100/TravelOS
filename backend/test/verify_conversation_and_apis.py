@@ -3,6 +3,10 @@ import httpx
 import json
 import sys
 import io
+import os
+
+# Ensure backend root is in sys.path
+sys.path.insert(0, os.path.abspath("."))
 
 # Ensure UTF-8 output on Windows console
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')

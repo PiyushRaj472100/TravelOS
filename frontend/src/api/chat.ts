@@ -3,7 +3,9 @@
 
 import type { ChatRequest, ChatResponse } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || '';
+const API_BASE =
+  (import.meta.env.VITE_API_URL as string) ||
+  'https://travelos-ncn1.onrender.com';
 
 // ----------------------------------------------------------------
 // Generic request helper

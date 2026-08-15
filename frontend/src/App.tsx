@@ -35,7 +35,7 @@ const App: FC = () => {
     clearSession,
   } = useChat();
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('itinerary');
+  const [activeTab, setActiveTab] = useState<SidebarTab>('map');
   const [showLanding, setShowLanding] = useState<boolean>(true);
   const [layoutMode, setLayoutMode] = useState<'standard' | 'split-map'>('standard');
 
@@ -53,7 +53,7 @@ const App: FC = () => {
   const handleNewTrip = () => {
     clearSession();
     setShowLanding(true);
-    setActiveTab('itinerary');
+    setActiveTab('map');
     setLayoutMode('standard');
   };
 

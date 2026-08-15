@@ -42,7 +42,7 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
   const [filterType, setFilterType] = useState<string>('all');
   const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
   const [is3D, setIs3D] = useState(false);
-  const [currentStyle, setCurrentStyle] = useState<MapStyleKey>('dark');
+  const [currentStyle, setCurrentStyle] = useState<MapStyleKey>('streets');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
 
   const markers = mapData?.markers || [];

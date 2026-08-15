@@ -515,7 +515,60 @@ JSON format:
             if cn.lower() in q_lower and cn not in detected_countries:
                 detected_countries.append(cn)
 
-        # Safety & Emergency
+        # Strong planning intent check
+        is_planning_intent = any(w in q_lower for w in [
+            "want to go", "want to visit", "planning to", "plan a trip", "plan my",
+            "build my", "create itinerary", "build itinerary", "full itinerary",
+            "depart from", "departing from", "budget is", "budget of", "budget for",
+            "trip to", "travel to", "going to", "vacation to", "holiday in",
+            "build my full itinerary now", "generate itinerary", "make a plan"
+        ]) or (
+            any(w in q_lower for w in ["day", "days", "night", "nights", "week", "weeks"])
+            and any(w in q_lower for w in ["budget", "inr", "usd", "eur", "gbp", "rs", "₹", "$", "€", "£", "hotel", "hotels", "stay", "wife", "husband", "family", "friends", "solo", "couple"])
+        )
+
+        # Flights
+        if any(w in q_lower for w in ["flight", "flights", "airline", "tickets", "airfare", "fly"]):
+            return RAGQuery(
+                question=question,
+                category="flight",
+                needs_live_data=True,
+                query_type="planning",
+                origin="LHR" if "london" in q_lower or "lhr" in q_lower else None,
+                destination="DXB" if "dubai" in q_lower or "dxb" in q_lower else None,
+            )
+
+        # Weather
+        if any(w in q_lower for w in ["weather", "temperature", "forecast", "rain", "sunny", "climate"]):
+            return RAGQuery(
+                question=question,
+                category="weather",
+                needs_live_data=True,
+                query_type="planning" if any(w in q_lower for w in ["trip", "visit", "go", "flying"]) else "knowledge",
+                cities=detected_cities,
+                countries=detected_countries
+            )
+
+        # Currency
+        if any(w in q_lower for w in ["convert", "exchange rate", "currency", "usd to inr", "inr to eur", "usd to eur"]):
+            return RAGQuery(
+                question=question,
+                category="currency",
+                needs_live_data=True,
+                query_type="planning"
+            )
+
+        if is_planning_intent:
+            return RAGQuery(
+                question=question,
+                category="destination_information",
+                needs_live_data=False,
+                query_type="planning",
+                cities=detected_cities,
+                countries=detected_countries
+            )
+
+        # Safety & Emergency (only when not a multi-parameter planning intent)
         if any(w in q_lower for w in ["safety", "saftey", "safe", "danger", "dangerous", "scam", "scams", "emergency", "police", "crime", "precaution", "precautions", "theft", "pickpocket"]):
             return RAGQuery(
                 question=question,
@@ -535,37 +588,6 @@ JSON format:
                 query_type="knowledge",
                 countries=detected_countries,
                 cities=detected_cities
-            )
-
-        # Weather
-        if any(w in q_lower for w in ["weather", "temperature", "forecast", "rain", "sunny", "climate"]):
-            return RAGQuery(
-                question=question,
-                category="weather",
-                needs_live_data=True,
-                query_type="planning" if any(w in q_lower for w in ["trip", "visit", "go", "flying"]) else "knowledge",
-                cities=detected_cities,
-                countries=detected_countries
-            )
-
-        # Currency
-        if any(w in q_lower for w in ["convert", "exchange rate", "currency", "usd", "eur", "jpy", "inr", "gbp", "yen", "dollars"]):
-            return RAGQuery(
-                question=question,
-                category="currency",
-                needs_live_data=True,
-                query_type="planning"
-            )
-
-        # Flights
-        if any(w in q_lower for w in ["flight", "flights", "airline", "tickets", "airfare", "fly"]):
-            return RAGQuery(
-                question=question,
-                category="flight",
-                needs_live_data=True,
-                query_type="planning",
-                origin="LHR" if "london" in q_lower or "lhr" in q_lower else None,
-                destination="DXB" if "dubai" in q_lower or "dxb" in q_lower else None,
             )
 
         # Accommodations

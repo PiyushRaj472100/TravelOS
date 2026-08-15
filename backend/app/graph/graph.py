@@ -66,6 +66,8 @@ class GraphService:
             itinerary_agent=self.itinerary_agent,
             budget_agent=self.budget_agent,
             currency_service=self.live_query_service.currency_service,
+            flight_service=self.live_query_service.flight_service,
+            weather_service=self.live_query_service.weather_service,
         )
 
         self.conversation_service = ConversationService(llm_service=self.llm_service)

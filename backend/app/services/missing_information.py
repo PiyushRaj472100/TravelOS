@@ -293,6 +293,19 @@ class MissingInformationDetector:
     def is_informational_or_place_query(user_message: str) -> bool:
         msg_lower = user_message.lower().strip()
 
+        # If user is providing multi-parameter trip requirements or asking to build trip, it is NOT an info query
+        planning_signals = [
+            "want to go", "want to visit", "planning to", "plan a trip", "plan my",
+            "build my", "create itinerary", "build itinerary", "full itinerary",
+            "depart from", "departing from", "budget is", "budget of", "budget for",
+            "trip to", "travel to", "going to", "build my full itinerary now"
+        ]
+        if any(sig in msg_lower for sig in planning_signals):
+            return False
+
+        if any(w in msg_lower for w in ["day", "days", "night", "nights"]) and any(w in msg_lower for w in ["budget", "inr", "usd", "eur", "gbp", "₹", "$", "€"]):
+            return False
+
         info_keywords = [
             "tell me about", "tell me more about", "tell me more", "what is", "what are", "where is", "where are",
             "details about", "info on", "information about", "how is", "how are", "how do",
@@ -309,7 +322,6 @@ class MissingInformationDetector:
 
         return False
 
-    @staticmethod
     @staticmethod
     def fill_missing_from_context(
         state: TravelState,

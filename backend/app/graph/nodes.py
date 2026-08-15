@@ -330,7 +330,11 @@ class GraphNodes:
         session_id = state["session_id"]
         itinerary_ready = state.get("itinerary_ready", False)
         is_cta_click = state.get("is_cta_click", False)
-        wants_build = is_cta_click
+        wants_build = (
+            is_cta_click
+            or self.orchestrator._is_build_trip_request(message)
+            or (itinerary_ready and not travel_state.itinerary)
+        )
         questionnaire_in_progress = not itinerary_ready
 
         enrichment: Dict[str, Any] = {}
@@ -341,6 +345,7 @@ class GraphNodes:
 
         run_orchestration = (
             (wants_build and itinerary_ready)
+            or (itinerary_ready and not travel_state.itinerary)
             or (not questionnaire_in_progress and self.orchestrator._is_hotel_request(message))
             or (not questionnaire_in_progress and self.orchestrator._is_activity_request(message))
             or (not questionnaire_in_progress and self.orchestrator._is_budget_request(message))
@@ -390,10 +395,14 @@ class GraphNodes:
                     enrichment["activities"] = replan_res["activities"]
                     travel_state.activities = replan_res["activities"]
 
+        flights = list(enrichment.get("flights") or flights)
+        weather = enrichment.get("weather") or state.get("weather")
+
         return {
             "enrichment": enrichment,
             "agent_statuses": agent_statuses,
             "flights": flights,
+            "weather": weather,
             "raw_answer": raw_answer,
             "sources": sources,
             "travel_state": travel_state,
@@ -412,9 +421,10 @@ class GraphNodes:
         raw_answer = state.get("raw_answer") or ""
         missing = state.get("missing_information") or []
         enrichment = state.get("enrichment") or {}
-        weather = state.get("weather")
+        weather = state.get("weather") or enrichment.get("weather")
         currency_data = state.get("currency_data")
-        flights = state.get("flights") or []
+        flights = state.get("flights") or enrichment.get("flights") or []
+
         sources = state.get("sources") or []
         agent_statuses = state.get("agent_statuses") or []
         is_cta_click = state.get("is_cta_click", False)
@@ -438,9 +448,10 @@ class GraphNodes:
                     )
                 }
 
-        # 2. Check CTA generation gate: trigger CTA button when all 9 questionnaire steps complete
+        # 2. Check CTA generation gate: trigger CTA button when all steps complete AND itinerary not yet generated
         if (
             not travel_state.itinerary
+            and not enrichment.get("itinerary")
             and not getattr(travel_state, "cta_shown", False)
             and not missing
             and not is_cta_click
@@ -468,6 +479,7 @@ class GraphNodes:
                     cta_action="generate_itinerary",
                 )
             }
+
 
         # 3. Check budget feasibility
         feasibility = self.orchestrator.budget_agent.check_budget_feasibility(travel_state)

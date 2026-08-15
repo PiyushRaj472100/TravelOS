@@ -18,6 +18,9 @@ from app.rag.query import RAGQuery
 
 
 from app.services.currency_services import CurrencyService
+from app.services.flight_service import FlightService
+from app.services.weather_service import WeatherService
+from app.services.flight_ranker import FlightRanker
 
 
 class OrchestratorAgent:
@@ -30,6 +33,8 @@ class OrchestratorAgent:
         itinerary_agent,
         budget_agent,
         currency_service: CurrencyService | None = None,
+        flight_service: FlightService | None = None,
+        weather_service: WeatherService | None = None,
     ):
         self.research_agent = research_agent
         self.hotel_agent = hotel_agent
@@ -37,6 +42,8 @@ class OrchestratorAgent:
         self.itinerary_agent = itinerary_agent
         self.budget_agent = budget_agent
         self.currency_service = currency_service or CurrencyService()
+        self.flight_service = flight_service or FlightService()
+        self.weather_service = weather_service or WeatherService()
 
 
     # =================================================
@@ -157,18 +164,70 @@ class OrchestratorAgent:
 
 
         # -------------------------------------------------
-        # 4. Build Full Trip — when explicitly requested
+        # 4. Build Full Trip — when explicitly requested or all info ready
         # -------------------------------------------------
 
         from app.services.missing_information import MissingInformationDetector
-        is_build_request = self._is_build_trip_request(query.question)
         has_minimum_state = bool(
             (state.destinations or state.cities)
             and state.duration_days
             and not MissingInformationDetector.detect(state)
         )
+        is_build_request = (
+            self._is_build_trip_request(query.question)
+            or (has_minimum_state and not state.itinerary)
+            or "build my full itinerary now" in (query.question or "").lower()
+        )
 
-        if is_build_request and has_minimum_state:
+        weather_data: dict | None = None
+
+        if has_minimum_state and (is_build_request or not state.itinerary):
+
+            # Flights (auto-search from origin to destination if origin is known)
+            if not flights and state.origin and (state.destinations or state.cities):
+                agent_statuses.append(
+                    AgentStatus(agent="flights", status="working", message="Searching flights...")
+                )
+                try:
+                    from datetime import date, timedelta
+                    dep_date = state.start_date or (date.today() + timedelta(days=30)).strftime("%Y-%m-%d")
+                    dest_name = state.destinations[0] if state.destinations else state.cities[0]
+                    pax = state.travelers or 1
+                    raw_flights = self.flight_service.search_flights(
+                        origin=state.origin,
+                        destination=dest_name,
+                        departure_date=dep_date,
+                        passengers=pax,
+                    )
+                    if raw_flights:
+                        ranked = FlightRanker.balanced(raw_flights, limit=5) or raw_flights[:5]
+                        flights = [self._serialize_flight(f, state.currency) for f in ranked]
+                        agent_statuses[-1] = AgentStatus(
+                            agent="flights", status="done",
+                            message=f"{len(flights)} flights found"
+                        )
+                    else:
+                        agent_statuses[-1] = AgentStatus(
+                            agent="flights", status="done",
+                            message="No flights found for route"
+                        )
+                except Exception as e:
+                    print(f"[Orchestrator] Flight auto-search error: {e}")
+                    agent_statuses[-1] = AgentStatus(
+                        agent="flights", status="failed",
+                        message="Flight search unavailable"
+                    )
+
+            # Weather (auto-fetch destination weather)
+            if state.destinations or state.cities:
+                try:
+                    dest_city = state.cities[0] if state.cities else state.destinations[0]
+                    weather_data = self.weather_service.get_current_weather(dest_city)
+                    agent_statuses.append(
+                        AgentStatus(agent="weather", status="done", message=f"Weather retrieved for {dest_city}")
+                    )
+                except Exception as e:
+                    print(f"[Orchestrator] Weather fetch error: {e}")
 
             # Activities
             agent_statuses.append(
@@ -195,7 +254,8 @@ class OrchestratorAgent:
                 )
                 try:
                     hotel_result = self.hotel_agent.search(state)
-                    hotels = hotel_result.get("hotels", [])
+                    raw_hotels = hotel_result.get("hotels", [])
+                    hotels = [self._serialize_hotel(h, state.currency) for h in raw_hotels]
                     agent_statuses[-1] = AgentStatus(
                         agent="hotel", status="done",
                         message=f"{len(hotels)} hotels found"
@@ -318,10 +378,12 @@ class OrchestratorAgent:
             "activities": activities,
             "itinerary": itinerary,
             "budget": budget,
+            "weather": weather_data,
             "map_data": map_data,
             "research_answer": research_answer,
             "research_sources": research_sources,
         }
+
 
 
     # =================================================
@@ -493,19 +555,27 @@ class OrchestratorAgent:
         return any(k in text for k in keywords)
 
     def _is_build_trip_request(self, text: str) -> bool:
-        text = text.lower()
+        if not text:
+            return False
+        text = text.lower().strip()
         keywords = [
             "build my trip", "plan my trip", "create itinerary",
             "full itinerary", "complete trip", "plan everything",
             "build itinerary", "generate trip", "make a plan",
             "plan the trip", "full plan", "plan my vacation",
             "plan a trip", "plan a ", "plan my", "plan vacation",
-            "plan holiday", "build a trip", "design my trip"
+            "plan holiday", "build a trip", "design my trip",
+            "build my full itinerary now", "build full itinerary",
+            "build my itinerary", "generate itinerary", "generate my itinerary",
+            "want to go", "want to visit", "trip to", "travel to", "going to",
+            "planning to", "planning a trip", "vacation to", "holiday in",
         ]
         if any(k in text for k in keywords):
             return True
         import re
-        if re.search(r'plan\s+(?:a|an|\d+[\s\-]+day|my|the)\s+.*(?:trip|vacation|getaway|holiday|itinerary|visit|tour)', text):
+        if re.search(r'(?:plan|build|create|generate|want to go|going to|travel to|visit)\s+.*(?:trip|vacation|getaway|holiday|itinerary|visit|tour|days|budget)', text):
+            return True
+        if re.search(r'\b\d+\s*(?:day|night|d|n)\b', text) and any(w in text for w in ["budget", "hotel", "wife", "husband", "friend", "family", "delhi", "mumbai", "paris", "tokyo"]):
             return True
         return False
 

@@ -38,7 +38,14 @@ class QueryRouter:
             return "live"
 
         # ---------------------------------------------
-        # 2. Knowledge queries / specific RAG categories
+        # 2. Planning intent always routes to planning!
+        # ---------------------------------------------
+
+        if query.query_type == "planning":
+            return "planning"
+
+        # ---------------------------------------------
+        # 3. Knowledge queries / specific RAG categories
         # ---------------------------------------------
 
         if query.query_type == "knowledge":
@@ -52,16 +59,8 @@ class QueryRouter:
             "entry_requirements",
             "culture",
             "packing",
-            "destination_information",
         }:
             return "rag"
-
-        # ---------------------------------------------
-        # 3. Planning intent
-        # ---------------------------------------------
-
-        if query.query_type == "planning":
-            return "planning"
 
         # ---------------------------------------------
         # 4. Other Knowledge / Live categories fallback
@@ -71,10 +70,11 @@ class QueryRouter:
             return "rag"
 
         if query.category in self.LIVE_CATEGORIES:
-            return "rag"
+            return "live"
 
         # ---------------------------------------------
         # 5. Safe fallback
         # ---------------------------------------------
 
-        return "rag"
+        return "planning"
+

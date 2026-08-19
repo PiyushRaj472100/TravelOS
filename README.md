@@ -28,7 +28,7 @@ Planning an international trip often requires juggling dozens of disconnected br
 **TravelOS** replaces this fragmented process with an **autonomous multi-agent system** orchestrated by **LangGraph** and powered by **Google Gemini** and **FAISS Vector RAG**. Through natural conversation, TravelOS automatically extracts travel constraints, resolves global currencies and airport codes, routes sub-tasks to specialized domain agents, calculates real-time expense allocations, and projects every point of interest onto an interactive 3D map.
 
 ### 🌐 Live Deployments
-- **Frontend App:** [https://travelos-1.onrender.com](https://travelos-1.onrender.com)
+- **Frontend App:** [https://travelos-1.onrender.com](https://travel-os-rho.vercel.app/)
 - **Backend API:** [https://travelos-ncn1.onrender.com](https://travelos-ncn1.onrender.com)
 
 ---

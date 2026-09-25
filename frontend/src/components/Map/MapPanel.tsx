@@ -19,18 +19,26 @@ interface MapPanelProps {
 
 type MapStyleKey = 'dark' | 'streets' | 'satellite';
 
+const GEOAPIFY_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY || '8089437eb40b4a00a78111daa732d395';
+
 const MAP_STYLES: Record<MapStyleKey, { name: string; url: string }> = {
   dark: {
     name: 'Dark Matter',
-    url: 'https://a.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png',
+    url: GEOAPIFY_KEY
+      ? `https://maps.geoapify.com/v1/tile/dark-matter/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
+      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   },
   streets: {
-    name: 'Voyager',
-    url: 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+    name: 'Streets',
+    url: GEOAPIFY_KEY
+      ? `https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
+      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   },
   satellite: {
     name: 'Positron',
-    url: 'https://a.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
+    url: GEOAPIFY_KEY
+      ? `https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
+      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   },
 };
 
@@ -66,7 +74,7 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
             type: 'raster',
             tiles: [MAP_STYLES[currentStyle].url],
             tileSize: 256,
-            attribution: '&copy; CARTO &copy; OpenStreetMap',
+            attribution: '&copy; Geoapify &copy; OpenStreetMap contributors',
           },
         },
         layers: [

@@ -144,7 +144,8 @@ class GraphNodes:
         self.session_manager.save_state(session_id, travel_state)
 
         # Detect questionnaire and informational query status
-        is_info_query = MissingInformationDetector.is_informational_or_place_query(message)
+        # If answering an active questionnaire field, it's NOT an informational/place query
+        is_info_query = False if current_field else MissingInformationDetector.is_informational_or_place_query(message)
         missing = [] if is_info_query else MissingInformationDetector.detect(travel_state)
         itinerary_ready = MissingInformationDetector.is_ready_for_itinerary(travel_state)
         state_summary = ConversationService.state_summary(travel_state)
@@ -165,6 +166,10 @@ class GraphNodes:
     # -----------------------------------------------------------------------
     def query_analyzer_node(self, state: AgentGraphState) -> Dict[str, Any]:
         message = state["message"]
+        current_field = state.get("current_field")
+        itinerary_ready = state.get("itinerary_ready", False)
+        is_cta_click = state.get("is_cta_click", False)
+
         try:
             query = self.query_analyzer.analyze(message)
         except Exception as e:
@@ -172,6 +177,14 @@ class GraphNodes:
             query = self.query_analyzer._heuristic_analyze(message)
 
         route = self.query_router.route(query)
+
+        # If user is answering questionnaire or questionnaire is complete,
+        # ensure they stay in trip planning flow and do not get hijacked to RAG
+        if current_field or itinerary_ready or is_cta_click:
+            route = "planning"
+            if hasattr(query, "query_type"):
+                query.query_type = "planning"
+
         return {
             "query": query,
             "route": route,
@@ -455,8 +468,7 @@ class GraphNodes:
             and not getattr(travel_state, "cta_shown", False)
             and not missing
             and not is_cta_click
-            and route not in ("rag", "live")
-            and not raw_answer
+            and (route not in ("rag", "live") or itinerary_ready)
             and not is_info_query
         ):
             travel_state.cta_shown = True

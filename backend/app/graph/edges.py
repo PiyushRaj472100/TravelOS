@@ -22,6 +22,11 @@ def route_after_query_analysis(state: AgentGraphState) -> str:
     - 'rag': calls rag_knowledge_node
     - 'planning' / default: calls orchestrator_node
     """
+    # If the user was answering a questionnaire field, or all fields are now collected,
+    # or the user clicked CTA, always route to orchestrator to prepare/build the trip!
+    if state.get("is_cta_click") or state.get("itinerary_ready") or state.get("current_field"):
+        return "orchestrator_node"
+
     route = state.get("route", "planning")
     if route == "live":
         return "live_tools_node"

@@ -183,89 +183,111 @@ class OrchestratorAgent:
 
         if has_minimum_state and (is_build_request or not state.itinerary):
 
-            # Flights (auto-search from origin to destination if origin is known)
-            if not flights and state.origin and (state.destinations or state.cities):
-                agent_statuses.append(
-                    AgentStatus(agent="flights", status="working", message="Searching flights...")
-                )
-                try:
-                    from datetime import date, timedelta
-                    dep_date = state.start_date or (date.today() + timedelta(days=30)).strftime("%Y-%m-%d")
-                    dest_name = state.destinations[0] if state.destinations else state.cities[0]
-                    pax = state.travelers or 1
-                    raw_flights = self.flight_service.search_flights(
-                        origin=state.origin,
-                        destination=dest_name,
-                        departure_date=dep_date,
-                        passengers=pax,
-                    )
-                    if raw_flights:
-                        ranked = FlightRanker.balanced(raw_flights, limit=5) or raw_flights[:5]
-                        flights = [self._serialize_flight(f, state.currency) for f in ranked]
-                        agent_statuses[-1] = AgentStatus(
-                            agent="flights", status="done",
-                            message=f"{len(flights)} flights found"
+            from concurrent.futures import ThreadPoolExecutor
+
+            def _task_flights():
+                if not flights and state.origin and (state.destinations or state.cities):
+                    try:
+                        from datetime import date, timedelta
+                        dep_date = state.start_date or (date.today() + timedelta(days=30)).strftime("%Y-%m-%d")
+                        dest_name = state.destinations[0] if state.destinations else state.cities[0]
+                        pax = state.travelers or 1
+                        raw_flights = self.flight_service.search_flights(
+                            origin=state.origin,
+                            destination=dest_name,
+                            departure_date=dep_date,
+                            passengers=pax,
                         )
-                    else:
-                        agent_statuses[-1] = AgentStatus(
-                            agent="flights", status="done",
-                            message="No flights found for route"
+                        if raw_flights:
+                            ranked = FlightRanker.balanced(raw_flights, limit=5) or raw_flights[:5]
+                            res_flights = [self._serialize_flight(f, state.currency) for f in ranked]
+                            status = AgentStatus(
+                                agent="flights", status="done",
+                                message=f"{len(res_flights)} flights found"
+                            )
+                            return res_flights, status
+                        else:
+                            return [], AgentStatus(
+                                agent="flights", status="done",
+                                message="No flights found for route"
+                            )
+                    except Exception as e:
+                        print(f"[Orchestrator] Flight auto-search error: {e}")
+                        return [], AgentStatus(
+                            agent="flights", status="failed",
+                            message="Flight search unavailable"
                         )
-                except Exception as e:
-                    print(f"[Orchestrator] Flight auto-search error: {e}")
-                    agent_statuses[-1] = AgentStatus(
-                        agent="flights", status="failed",
-                        message="Flight search unavailable"
-                    )
+                return flights, None
 
-            # Weather (auto-fetch destination weather)
-            if state.destinations or state.cities:
+            def _task_weather():
+                if state.destinations or state.cities:
+                    try:
+                        dest_city = state.cities[0] if state.cities else state.destinations[0]
+                        w_data = self.weather_service.get_current_weather(dest_city)
+                        status = AgentStatus(
+                            agent="weather", status="done",
+                            message=f"Weather retrieved for {dest_city}"
+                        )
+                        return w_data, status
+                    except Exception as e:
+                        print(f"[Orchestrator] Weather fetch error: {e}")
+                return None, None
+
+            def _task_activities():
                 try:
-                    dest_city = state.cities[0] if state.cities else state.destinations[0]
-                    weather_data = self.weather_service.get_current_weather(dest_city)
-                    agent_statuses.append(
-                        AgentStatus(agent="weather", status="done", message=f"Weather retrieved for {dest_city}")
+                    activity_result = self.activity_agent.generate_activities(state)
+                    acts = activity_result.get("activities", [])
+                    status = AgentStatus(
+                        agent="activities", status="done",
+                        message=f"{len(acts)} activities found"
                     )
+                    return acts, status
                 except Exception as e:
-                    print(f"[Orchestrator] Weather fetch error: {e}")
-
-            # Activities
-            agent_statuses.append(
-                AgentStatus(agent="activities", status="working", message="Finding activities...")
-            )
-            try:
-                activity_result = self.activity_agent.generate_activities(state)
-                activities = activity_result.get("activities", [])
-                agent_statuses[-1] = AgentStatus(
-                    agent="activities", status="done",
-                    message=f"{len(activities)} activities found"
-                )
-            except Exception as e:
-                print(f"[Orchestrator] Activity agent error: {e}")
-                agent_statuses[-1] = AgentStatus(
-                    agent="activities", status="failed",
-                    message="Activity generation failed"
-                )
-
-            # Hotels (if not already fetched)
-            if not hotels and (state.destinations or state.cities):
-                agent_statuses.append(
-                    AgentStatus(agent="hotel", status="working", message="Searching hotels...")
-                )
-                try:
-                    hotel_result = self.hotel_agent.search(state)
-                    raw_hotels = hotel_result.get("hotels", [])
-                    hotels = [self._serialize_hotel(h, state.currency) for h in raw_hotels]
-                    agent_statuses[-1] = AgentStatus(
-                        agent="hotel", status="done",
-                        message=f"{len(hotels)} hotels found"
+                    print(f"[Orchestrator] Activity agent error: {e}")
+                    return [], AgentStatus(
+                        agent="activities", status="failed",
+                        message="Activity generation failed"
                     )
-                except Exception as e:
-                    print(f"[Orchestrator] Hotel agent error: {e}")
-                    agent_statuses[-1] = AgentStatus(
-                        agent="hotel", status="failed",
-                        message="Hotel search unavailable"
-                    )
+
+            def _task_hotels():
+                if not hotels and (state.destinations or state.cities):
+                    try:
+                        hotel_result = self.hotel_agent.search(state)
+                        raw_hotels = hotel_result.get("hotels", [])
+                        res_hotels = [self._serialize_hotel(h, state.currency) for h in raw_hotels]
+                        status = AgentStatus(
+                            agent="hotel", status="done",
+                            message=f"{len(res_hotels)} hotels found"
+                        )
+                        return res_hotels, status
+                    except Exception as e:
+                        print(f"[Orchestrator] Hotel agent error: {e}")
+                        return [], AgentStatus(
+                            agent="hotel", status="failed",
+                            message="Hotel search unavailable"
+                        )
+                return hotels, None
+
+            # Execute all 4 concurrently
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                fut_flights = executor.submit(_task_flights)
+                fut_weather = executor.submit(_task_weather)
+                fut_activities = executor.submit(_task_activities)
+                fut_hotels = executor.submit(_task_hotels)
+
+                flights, status_flights = fut_flights.result()
+                weather_data, status_weather = fut_weather.result()
+                activities, status_activities = fut_activities.result()
+                hotels, status_hotels = fut_hotels.result()
+
+            if status_flights:
+                agent_statuses.append(status_flights)
+            if status_weather:
+                agent_statuses.append(status_weather)
+            if status_activities:
+                agent_statuses.append(status_activities)
+            if status_hotels:
+                agent_statuses.append(status_hotels)
 
             # Itinerary
             agent_statuses.append(

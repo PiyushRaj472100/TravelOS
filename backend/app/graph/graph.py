@@ -170,6 +170,55 @@ class GraphService:
 
         return result_state.get("final_response") or result_state.get("special_response")
 
+    def process_message_stream(self, request: ChatRequest):
+        """Streams agent status events and the final ChatResponse via SSE."""
+        import json
+        session_id = request.session_id or str(uuid4())
+        travel_state = session_manager.get_state(session_id)
+        conversation_history = session_manager.get_history_text(session_id)
+
+        session_manager.add_message(session_id, "user", request.message)
+
+        initial_state: AgentGraphState = {
+            "session_id": session_id,
+            "message": request.message,
+            "travel_state": travel_state,
+            "conversation_history": conversation_history,
+            "special_response": None,
+            "final_response": None,
+        }
+
+        # Initial status
+        yield f"data: {json.dumps({'type': 'status', 'statuses': [{'agent': 'research', 'status': 'working', 'message': 'Processing your request...'}]})}\n\n"
+
+        for chunk in self.compiled_graph.stream(initial_state, stream_mode="updates"):
+            for node_name, node_output in chunk.items():
+                if node_name == "special_handlers_node":
+                    if node_output.get("special_response"):
+                        resp = node_output["special_response"]
+                        payload = resp.model_dump() if hasattr(resp, "model_dump") else resp
+                        yield f"data: {json.dumps({'type': 'complete', 'response': payload})}\n\n"
+                        return
+                elif node_name == "extraction_node":
+                    yield f"data: {json.dumps({'type': 'status', 'statuses': [{'agent': 'research', 'status': 'done', 'message': 'Information extracted'}, {'agent': 'itinerary', 'status': 'working', 'message': 'Planning itinerary...'}]})}\n\n"
+                elif node_name == "orchestrator_node":
+                    statuses = node_output.get("agent_statuses", [])
+                    serialized = [
+                        s.model_dump() if hasattr(s, "model_dump") else s for s in statuses
+                    ]
+                    yield f"data: {json.dumps({'type': 'status', 'statuses': serialized})}\n\n"
+                elif node_name == "response_generator_node":
+                    final_resp = node_output.get("final_response")
+                    if final_resp:
+                        payload = final_resp.model_dump() if hasattr(final_resp, "model_dump") else final_resp
+                        yield f"data: {json.dumps({'type': 'complete', 'response': payload})}\n\n"
+                        return
+
+        # Fallback if stream ends without complete
+        final = self.process_message(request)
+        payload = final.model_dump() if hasattr(final, "model_dump") else final
+        yield f"data: {json.dumps({'type': 'complete', 'response': payload})}\n\n"
+
 
 # Singleton instance
 graph_service = GraphService()

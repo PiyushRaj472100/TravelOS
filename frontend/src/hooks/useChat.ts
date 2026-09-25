@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { sendMessage } from '../api/chat';
+import { sendMessageStream } from '../api/chat';
 import type {
   ChatMessage,
   ChatResponse,
@@ -130,10 +130,18 @@ export function useChat(): UseChatResult {
     setError(null);
 
     try {
-      const resp = await sendMessage({
-        message: text,
-        session_id: sessionIdRef.current,
-      });
+      const resp = await sendMessageStream(
+        {
+          message: text,
+          session_id: sessionIdRef.current,
+        },
+        (liveStatuses) => {
+          setTripData(prev => ({
+            ...prev,
+            agent_statuses: liveStatuses,
+          }));
+        },
+      );
 
       sessionIdRef.current = resp.session_id;
 

@@ -1,3 +1,4 @@
+import time
 import requests
 
 
@@ -15,6 +16,8 @@ class WeatherService:
     def __init__(self):
 
         self.timeout = 10
+        self._coords_cache: dict[str, dict] = {}
+        self._weather_cache: dict[str, tuple[float, dict]] = {}
 
 
     # =================================================
@@ -25,6 +28,10 @@ class WeatherService:
         self,
         city: str
     ) -> dict:
+
+        key = city.strip().lower()
+        if key in self._coords_cache:
+            return self._coords_cache[key]
 
         response = requests.get(
             self.GEOCODING_URL,
@@ -54,13 +61,15 @@ class WeatherService:
 
         location = results[0]
 
-        return {
+        res = {
             "name": location["name"],
             "latitude": location["latitude"],
             "longitude": location["longitude"],
             "country": location.get("country"),
             "timezone": location.get("timezone")
         }
+        self._coords_cache[key] = res
+        return res
 
 
     # =================================================
@@ -71,6 +80,13 @@ class WeatherService:
         self,
         city: str
     ) -> dict:
+
+        city_key = city.strip().lower()
+        now = time.time()
+        if city_key in self._weather_cache:
+            cache_time, cached_val = self._weather_cache[city_key]
+            if now - cache_time < 900:
+                return cached_val
 
         location = self._get_coordinates(
             city
@@ -106,7 +122,7 @@ class WeatherService:
             {}
         )
 
-        return {
+        result = {
             "type": "weather",
 
             "city": location["name"],
@@ -145,6 +161,8 @@ class WeatherService:
                 "wind_direction_10m"
             )
         }
+        self._weather_cache[city_key] = (now, result)
+        return result
 
 
     # =================================================

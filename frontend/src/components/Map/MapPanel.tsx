@@ -19,7 +19,7 @@ interface MapPanelProps {
 
 type MapStyleKey = 'streets' | 'dark' | 'satellite' | 'outdoor';
 
-const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY || '';
+const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY || '38yHTZOyUCW3to53QvrJ';
 const GEOAPIFY_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY || '8089437eb40b4a00a78111daa732d395';
 
 const getMapStyleUrl = (style: MapStyleKey): string | maplibregl.StyleSpecification => {

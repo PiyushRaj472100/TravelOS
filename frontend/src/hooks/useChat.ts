@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { sendMessageStream } from '../api/chat';
 import type {
   ChatMessage,
@@ -97,7 +97,30 @@ function mergeTripData(prev: TripData, resp: ChatResponse): TripData {
 }
 
 
-// ----------------------------------------------------------------
+// Storage Keys for state persistence across reloads
+const STORAGE_KEYS = {
+  MESSAGES: 'travelos_chat_messages',
+  TRIP_DATA: 'travelos_trip_data',
+  SESSION_ID: 'travelos_session_id',
+};
+
+function loadStored<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveStored<T>(key: string, val: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (err) {
+    console.warn(`[TravelOS] Error saving ${key} to localStorage:`, err);
+  }
+}
+
 // Hook
 // ----------------------------------------------------------------
 
@@ -113,13 +136,35 @@ export interface UseChatResult {
 }
 
 export function useChat(): UseChatResult {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [tripData, setTripData] = useState<TripData>(EMPTY_TRIP);
+  const [messages, setMessages] = useState<ChatMessage[]>(() =>
+    loadStored<ChatMessage[]>(STORAGE_KEYS.MESSAGES, [])
+  );
+  const [tripData, setTripData] = useState<TripData>(() =>
+    loadStored<TripData>(STORAGE_KEYS.TRIP_DATA, EMPTY_TRIP)
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sessionIdRef = useRef<string | null>(null);
+  const sessionIdRef = useRef<string | null>(
+    (() => {
+      try {
+        return localStorage.getItem(STORAGE_KEYS.SESSION_ID) || null;
+      } catch {
+        return null;
+      }
+    })()
+  );
   const lastUserMessageRef = useRef<string>('');
+
+  // Persist messages whenever updated
+  useEffect(() => {
+    saveStored(STORAGE_KEYS.MESSAGES, messages);
+  }, [messages]);
+
+  // Persist tripData whenever updated
+  useEffect(() => {
+    saveStored(STORAGE_KEYS.TRIP_DATA, tripData);
+  }, [tripData]);
 
   const doSend = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -144,6 +189,11 @@ export function useChat(): UseChatResult {
       );
 
       sessionIdRef.current = resp.session_id;
+      try {
+        if (resp.session_id) {
+          localStorage.setItem(STORAGE_KEYS.SESSION_ID, resp.session_id);
+        }
+      } catch {}
 
       setMessages(prev => [
         ...prev,
@@ -175,6 +225,13 @@ export function useChat(): UseChatResult {
     setMessages([]);
     setTripData(EMPTY_TRIP);
     setError(null);
+    try {
+      localStorage.removeItem(STORAGE_KEYS.MESSAGES);
+      localStorage.removeItem(STORAGE_KEYS.TRIP_DATA);
+      localStorage.removeItem(STORAGE_KEYS.SESSION_ID);
+      localStorage.removeItem('travelos_active_tab');
+      localStorage.removeItem('travelos_show_landing');
+    } catch {}
   }, []);
 
   return {
@@ -188,3 +245,4 @@ export function useChat(): UseChatResult {
     clearSession,
   };
 }
+

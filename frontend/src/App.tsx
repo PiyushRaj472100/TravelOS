@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import Header from './components/Layout/Header';
 import Sidebar, { type SidebarTab } from './components/Layout/Sidebar';
 import ChatPanel from './components/Chat/ChatPanel';
@@ -35,9 +35,54 @@ const App: FC = () => {
     clearSession,
   } = useChat();
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('map');
-  const [showLanding, setShowLanding] = useState<boolean>(true);
-  const [layoutMode, setLayoutMode] = useState<'standard' | 'split-map'>('standard');
+  const [activeTab, setActiveTab] = useState<SidebarTab>(() => {
+    try {
+      const stored = localStorage.getItem('travelos_active_tab');
+      return (stored as SidebarTab) || 'map';
+    } catch {
+      return 'map';
+    }
+  });
+
+  const [layoutMode, setLayoutMode] = useState<'standard' | 'split-map'>(() => {
+    try {
+      const stored = localStorage.getItem('travelos_layout_mode');
+      return (stored as 'standard' | 'split-map') || 'standard';
+    } catch {
+      return 'standard';
+    }
+  });
+
+  const [showLanding, setShowLanding] = useState<boolean>(() => {
+    try {
+      const storedLanding = localStorage.getItem('travelos_show_landing');
+      if (storedLanding !== null) return JSON.parse(storedLanding);
+      const storedMsgs = localStorage.getItem('travelos_chat_messages');
+      if (storedMsgs && JSON.parse(storedMsgs).length > 0) return false;
+      return true;
+    } catch {
+      return true;
+    }
+  });
+
+  // Persist navigation and view state across browser refreshes
+  useEffect(() => {
+    try {
+      localStorage.setItem('travelos_active_tab', activeTab);
+    } catch {}
+  }, [activeTab]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('travelos_layout_mode', layoutMode);
+    } catch {}
+  }, [layoutMode]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('travelos_show_landing', JSON.stringify(showLanding));
+    } catch {}
+  }, [showLanding]);
 
   const hasStartedConversation = messages.length > 0;
   const isLandingVisible = showLanding && !hasStartedConversation;
@@ -45,6 +90,9 @@ const App: FC = () => {
 
   const handleStartPlanning = (initialPrompt?: string) => {
     setShowLanding(false);
+    try {
+      localStorage.setItem('travelos_show_landing', 'false');
+    } catch {}
     if (initialPrompt) {
       sendUserMessage(initialPrompt);
     }
@@ -55,12 +103,21 @@ const App: FC = () => {
     setShowLanding(true);
     setActiveTab('map');
     setLayoutMode('standard');
+    try {
+      localStorage.removeItem('travelos_active_tab');
+      localStorage.removeItem('travelos_layout_mode');
+      localStorage.setItem('travelos_show_landing', 'true');
+    } catch {}
   };
 
   const handleUserSend = async (text: string) => {
     setShowLanding(false);
+    try {
+      localStorage.setItem('travelos_show_landing', 'false');
+    } catch {}
     await sendUserMessage(text);
   };
+
 
   return (
     <div className="travelos-app">

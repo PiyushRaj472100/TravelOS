@@ -143,6 +143,84 @@ class GeoService:
     }
 
     _cache: dict[str, GeoLocation] = {}
+    _poi_cache: dict[str, tuple[float, float]] = {
+        # Common iconic landmarks for instant pinpoint lookup
+        "eiffel tower": (48.8584, 2.2945),
+        "louvre": (48.8606, 2.3376),
+        "louvre museum": (48.8606, 2.3376),
+        "notre-dame": (48.8530, 2.3499),
+        "notre dame": (48.8530, 2.3499),
+        "musee d'orsay": (48.8599, 2.3265),
+        "orsay museum": (48.8599, 2.3265),
+        "arc de triomphe": (48.8738, 2.2950),
+        "sacre-coeur": (48.8867, 2.3431),
+        "champs-elysees": (48.8698, 2.3075),
+        "senso-ji": (35.7148, 139.7967),
+        "shibuya crossing": (35.6595, 139.7005),
+        "tokyo skytree": (35.7101, 139.8107),
+        "tokyo tower": (35.6586, 139.7454),
+        "fushimi inari": (34.9671, 135.7727),
+        "kinkaku-ji": (35.0394, 135.7292),
+        "colosseum": (41.8902, 12.4922),
+        "vatican": (41.9029, 12.4534),
+        "trevi fountain": (41.9009, 12.4833),
+        "big ben": (51.5007, -0.1246),
+        "london eye": (51.5033, -0.1195),
+        "tower of london": (51.5081, -0.0759),
+        "burj khalifa": (25.1972, 55.2744),
+        "dubai mall": (25.1985, 55.2796),
+        "statue of liberty": (40.6892, -74.0445),
+        "central park": (40.7851, -73.9683),
+        "empire state building": (40.7484, -73.9857),
+    }
+
+    @classmethod
+    def geocode_poi(cls, name: str, city: str = "") -> tuple[float, float] | None:
+        """Geocode landmark, attraction, or point of interest using cache and Geoapify."""
+        if not name:
+            return None
+
+        clean_name = name.lower().strip()
+        # Clean noise words from tour titles
+        for noise in ["timed-entry tour", "walking tour", "masterpieces exploration", "guided tour", "skip-the-line", "experience", "admission ticket", "day trip"]:
+            clean_name = clean_name.replace(noise, "").strip()
+
+        # Check static POI cache
+        for k, coords in cls._poi_cache.items():
+            if k in clean_name or clean_name in k:
+                return coords
+
+        cache_key = f"{clean_name}|{city.lower()}"
+        if cache_key in cls._poi_cache:
+            return cls._poi_cache[cache_key]
+
+        # Use Geoapify API if configured
+        import os
+        geoapify_key = os.getenv("GEOAPIFY_API_KEY")
+        if geoapify_key:
+            try:
+                search_query = f"{clean_name} {city}".strip()
+                resp = requests.get(
+                    "https://api.geoapify.com/v1/geocode/search",
+                    params={
+                        "text": search_query,
+                        "apiKey": geoapify_key,
+                        "limit": 1
+                    },
+                    timeout=4
+                )
+                if resp.ok:
+                    features = resp.json().get("features", [])
+                    if features:
+                        coords = features[0].get("geometry", {}).get("coordinates", [])
+                        if len(coords) >= 2:
+                            lng, lat = float(coords[0]), float(coords[1])
+                            cls._poi_cache[cache_key] = (lat, lng)
+                            return (lat, lng)
+            except Exception as e:
+                print(f"[GeoService] Geoapify POI error: {e}")
+
+        return None
 
     @classmethod
     def find_location(

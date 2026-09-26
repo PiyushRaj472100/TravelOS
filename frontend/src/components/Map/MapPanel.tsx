@@ -215,21 +215,35 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
     });
   };
 
-  // Reset Camera
-  const resetCamera = () => {
+  const [focusMode, setFocusMode] = useState<'destination' | 'route'>('destination');
+
+  // Auto-adaptive Camera: frames destination places tightly so user never needs to zoom or scroll
+  const adaptCamera = (mode: 'destination' | 'route' = focusMode) => {
     const map = mapInstanceRef.current;
     if (!map || !markers.length) return;
 
+    const destMarkers = markers.filter(m => m.marker_type !== 'airport');
+    const targetMarkers = (mode === 'route' || destMarkers.length === 0) ? markers : destMarkers;
+
     const bounds = new maplibregl.LngLatBounds();
-    markers.forEach(m => {
+    targetMarkers.forEach(m => {
       if (m.longitude != null && m.latitude != null) {
         bounds.extend([m.longitude, m.latitude]);
       }
     });
 
     if (!bounds.isEmpty()) {
-      map.fitBounds(bounds, { padding: 80, maxZoom: 13, duration: 1200 });
+      map.fitBounds(bounds, {
+        padding: { top: 130, bottom: 60, left: 60, right: 60 },
+        maxZoom: 14,
+        duration: 1200
+      });
     }
+  };
+
+  // Reset Camera
+  const resetCamera = () => {
+    adaptCamera(focusMode);
   };
 
   // Update Markers & Routes whenever mapData or filterType changes
@@ -247,12 +261,8 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
 
     if (visibleMarkers.length === 0) return;
 
-    const bounds = new maplibregl.LngLatBounds();
-
     visibleMarkers.forEach((marker) => {
       if (marker.longitude == null || marker.latitude == null) return;
-
-      bounds.extend([marker.longitude, marker.latitude]);
 
       // Custom marker container
       const el = document.createElement('div');
@@ -279,7 +289,7 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
 
         map.flyTo({
           center: [marker.longitude, marker.latitude],
-          zoom: Math.max(map.getZoom(), 12),
+          zoom: Math.max(map.getZoom(), 13),
           duration: 1000,
           essential: true,
         });
@@ -295,11 +305,29 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
     // Draw route lines if available
     drawRoutes(map, routes);
 
+    // Auto-adaptive framing: automatically focuses on destination attractions and hotels
+    // so user does NOT have to zoom in from world view
+    const destCluster = visibleMarkers.filter(m => m.marker_type !== 'airport');
+    const targetCluster = (filterType === 'airport' || focusMode === 'route' || destCluster.length === 0)
+      ? visibleMarkers
+      : destCluster;
+
+    const bounds = new maplibregl.LngLatBounds();
+    targetCluster.forEach((marker) => {
+      if (marker.longitude != null && marker.latitude != null) {
+        bounds.extend([marker.longitude, marker.latitude]);
+      }
+    });
 
     if (!bounds.isEmpty()) {
-      map.fitBounds(bounds, { padding: 80, maxZoom: 13, duration: 1200 });
+      map.fitBounds(bounds, {
+        padding: { top: 130, bottom: 60, left: 60, right: 60 },
+        maxZoom: 14,
+        duration: 1200
+      });
     }
-  }, [mapData, filterType]);
+  }, [mapData, filterType, focusMode]);
+
 
   // Counts by category
   const countByType = {
@@ -416,7 +444,51 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
         </div>
       </div>
 
+      {/* Auto-Adaptive Floating Destination Banner */}
+
+      {markers.length > 0 && (
+        <div className="map-destination-hero glass-strong animate-slide-up">
+          <div className="dest-hero-info">
+            <div className="dest-hero-badge">
+              <span className="dest-pulse"></span>
+              Auto-Adaptive City View
+            </div>
+            <h4 className="dest-hero-title">
+              {markers.find(m => m.marker_type === 'destination')?.name || 'Destination Overview'}
+            </h4>
+            <p className="dest-hero-subtitle">
+              {countByType.activity} Attractions · {countByType.hotel} Hotels plotted at exact coordinates
+            </p>
+          </div>
+          <div className="dest-hero-actions">
+            <button
+              className={`dest-view-btn ${focusMode === 'destination' ? 'active' : ''}`}
+              onClick={() => {
+                setFocusMode('destination');
+                adaptCamera('destination');
+              }}
+              title="Auto-focus destination city (no scrolling or zooming needed)"
+            >
+              🎯 Focus City
+            </button>
+            {routes.length > 0 && (
+              <button
+                className={`dest-view-btn ${focusMode === 'route' ? 'active' : ''}`}
+                onClick={() => {
+                  setFocusMode('route');
+                  adaptCamera('route');
+                }}
+                title="View full flight route"
+              >
+                ✈️ Full Route
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Map Canvas */}
+
       <div ref={mapContainerRef} className="map-canvas" />
 
       {/* Empty Overlay */}

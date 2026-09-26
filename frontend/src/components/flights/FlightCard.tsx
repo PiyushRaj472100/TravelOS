@@ -36,6 +36,9 @@ const FlightCard: FC<FlightCardProps> = ({ flight, index, onPromptSend }) => {
       ? '1 stop'
       : `${flight.stops} stops`;
 
+  const bookingUrl = flight.booking_url ||
+    `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(flight.destination)}%20from%20${encodeURIComponent(flight.origin)}`;
+
   return (
     <article
       className="flight-card animate-slide-up card"
@@ -104,20 +107,56 @@ const FlightCard: FC<FlightCardProps> = ({ flight, index, onPromptSend }) => {
             <span className="price-label">Price unavailable</span>
           )}
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
           {onPromptSend && flight.price && (
             <button
               type="button"
-              className="flight-action-btn"
-              onClick={() => onPromptSend(`Can flight from ${flight.origin} to ${flight.destination} at ${flight.price} ${flight.currency} fit in my budget?`)}
+              className="flight-select-btn"
+              onClick={() => onPromptSend(`Select flight from ${flight.origin} to ${flight.destination} at ${flight.price} ${flight.currency}`)}
+              style={{
+                backgroundColor: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
             >
-              ✈️ Check Budget
+              ✈️ Select Flight (Update Budget)
             </button>
           )}
+          <a
+            href={bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flight-view-btn"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              fontSize: '0.8rem',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              color: '#fff',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              fontWeight: 500,
+              cursor: 'pointer'
+            }}
+          >
+            🔗 Booking Details
+          </a>
         </div>
       </div>
     </article>
   );
+
 };
 
 export default FlightCard;

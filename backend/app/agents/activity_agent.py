@@ -109,12 +109,13 @@ Knowledge base context:
 Generate a list of {min(duration * 3, 18)} specific activities for this trip.
 
 Rules:
-- Activities must be real, specific places or experiences in {destination}
-- Match activities to the traveler's interests: {interests_str}
-- Include a diverse mix: free walking/sightseeing, cultural heritage, foodie markets, nature/parks, and a few premium adventures
-- Provide realistic approximate price per person in {target_currency} (e.g. free attractions = 0, temple entries / museums = modest cost, premium day tours = higher cost)
-- Mark cost_tier accurately: "budget" (free to low cost), "moderate" (standard admission/meals), "premium" (full-day tours, luxury or paid adventures)
-- Spread activities across different days (1 to {duration})
+- MUST-VISIT PLACES (CRITICAL): As a travel expert, ALWAYS include 3 to 5 world-famous, iconic must-visit landmark attractions for {destination} (e.g. Eiffel Tower, Louvre Museum, Notre-Dame, Arc de Triomphe for Paris; or Senso-ji, Shibuya Crossing, Tokyo Skytree for Tokyo). Mark these with "is_must_visit": true so the traveler never misses the top landmarks of the city, even if they choose adventure or other styles (they can skip them if they wish).
+- ADVENTURE & PREFERRED ACTIVITIES: Also include tailored activities matching the traveler's interests: {interests_str} and travel style: {state.travel_style or "adventure/balanced"}.
+- Activities must be real, specific places or experiences in {destination}.
+- Provide realistic approximate price per person in {target_currency} (free attractions = 0).
+- Mark cost_tier accurately: "budget", "moderate", "premium".
+- Spread activities across different days (1 to {duration}).
+- Provide latitude and longitude for the location whenever known.
 
 Return a JSON array. Each activity object:
 {{
@@ -130,10 +131,14 @@ Return a JSON array. Each activity object:
   "day_suggestion": 1,
   "area": "district or area name",
   "highlights": ["highlight1", "highlight2"],
-  "best_time": "morning|afternoon|evening|any"
+  "best_time": "morning|afternoon|evening|any",
+  "is_must_visit": true,
+  "latitude": 48.8584,
+  "longitude": 2.2945
 }}
 
 Return ONLY valid JSON array, no markdown, no explanation."""
+
 
         try:
             raw = self.llm_service.generate_response(prompt)

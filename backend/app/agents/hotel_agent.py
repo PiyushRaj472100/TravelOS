@@ -138,6 +138,27 @@ class HotelAgent:
                 room_count=1
             )
 
+            # Strict filtering for luxury 5-star hotels if preferred by user
+            travel_style = (state.travel_style or "").lower()
+            accom_pref = (state.accommodation_preference or "").lower()
+            interests = " ".join(state.interests or []).lower()
+            is_luxury = any(
+                k in travel_style or k in accom_pref or k in interests
+                for k in ["luxury", "5 star", "5-star", "resort", "5star", "premium", "deluxe", "high end", "palace"]
+            )
+
+            if is_luxury and hotels:
+                # Filter strictly for 5-star luxury hotels (stars >= 4.5 or 5)
+                luxury_hotels = [
+                    h for h in hotels
+                    if (float(h.get("stars") or 0) >= 4.5)
+                    or any(w in (h.get("name") or "").lower() for w in ["resort", "palace", "luxury", "ritz", "four seasons", "sofitel", "mandarin", "shangri-la", "grand", "5 star"])
+                ]
+                if luxury_hotels:
+                    # Sort by stars (descending) and luxury quality
+                    luxury_hotels.sort(key=lambda h: -(float(h.get("stars") or 0)))
+                    hotels = luxury_hotels
+
             return {
                 "agent": "hotel",
                 "status": "done",
@@ -147,6 +168,7 @@ class HotelAgent:
                 "adults": adults,
                 "hotels": hotels
             }
+
 
         except Exception as e:
             print(f"[HotelAgent] Hotel search error: {e}")

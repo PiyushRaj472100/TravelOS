@@ -507,20 +507,35 @@ class OrchestratorAgent:
                 a for a in active_activities
                 if not any(k in (a.get("type") or "").lower() for k in ["restaurant", "dining", "food"])
             ]
-            for i, act in enumerate(filtered_activities[:10]):
-                angle = (i * (2 * math.pi / max(1, min(len(filtered_activities), 10))))
-                radius = 0.015 + (i * 0.005)  # ~1.5 - 4km spread
-                act_lat = dest_m.latitude + (radius * math.cos(angle))
-                act_lng = dest_m.longitude + (radius * math.sin(angle) * 1.2)
+            for i, act in enumerate(filtered_activities[:12]):
+                act_name = act.get("name", "Attraction")
+                # 1. Use existing coordinates if already provided
+                act_lat = act.get("latitude")
+                act_lng = act.get("longitude")
+
+                # 2. Try pinpoint geocoding for real-world landmark coordinates
+                if not act_lat or not act_lng:
+                    poi_coords = GeoService.geocode_poi(act_name, dest_m.name)
+                    if poi_coords:
+                        act_lat, act_lng = poi_coords
+
+                # 3. Fallback to gentle radius within destination city bounds
+                if not act_lat or not act_lng:
+                    angle = (i * (2 * math.pi / max(1, min(len(filtered_activities), 12))))
+                    radius = 0.008 + (i * 0.002)  # 800m - 2km local city spread
+                    act_lat = dest_m.latitude + (radius * math.cos(angle))
+                    act_lng = dest_m.longitude + (radius * math.sin(angle) * 1.2)
+
                 markers.append(MapMarker(
                     id=f"act_{i}",
-                    name=act.get("name", "Attraction"),
+                    name=act_name,
                     latitude=act_lat,
                     longitude=act_lng,
                     marker_type="activity",
                     day=act.get("day_suggestion"),
                     description=act.get("type", "Sightseeing").capitalize() + (f" · {act.get('area')}" if act.get('area') else "")
                 ))
+
 
 
         # 5. Route legs from state.travel_legs

@@ -82,6 +82,48 @@
   flex-shrink: 0;
 }
 
+.map-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.map-status-pill.active {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.map-status-pill.active .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.map-status-pill.fallback {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.map-status-pill.fallback .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
 .tool-btn {
   display: inline-flex;
   align-items: center;
@@ -117,7 +159,7 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: 140px;
+  width: 175px;
   padding: 6px;
   border-radius: var(--radius-md);
   display: flex;

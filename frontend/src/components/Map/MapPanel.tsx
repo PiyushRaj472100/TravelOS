@@ -17,29 +17,60 @@ interface MapPanelProps {
   onPromptSend?: (prompt: string) => void;
 }
 
-type MapStyleKey = 'dark' | 'streets' | 'satellite';
+type MapStyleKey = 'streets' | 'dark' | 'satellite' | 'outdoor';
 
+const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY || '';
 const GEOAPIFY_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY || '8089437eb40b4a00a78111daa732d395';
 
-const MAP_STYLES: Record<MapStyleKey, { name: string; url: string }> = {
-  dark: {
-    name: 'Dark Matter',
-    url: GEOAPIFY_KEY
-      ? `https://maps.geoapify.com/v1/tile/dark-matter/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
-      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  },
-  streets: {
-    name: 'Streets',
-    url: GEOAPIFY_KEY
-      ? `https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
-      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  },
-  satellite: {
-    name: 'Positron',
-    url: GEOAPIFY_KEY
-      ? `https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
-      : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  },
+const getMapStyleUrl = (style: MapStyleKey): string | maplibregl.StyleSpecification => {
+  if (MAPTILER_KEY) {
+    const styleIds: Record<MapStyleKey, string> = {
+      streets: 'streets-v2',
+      dark: 'dataviz-dark',
+      satellite: 'hybrid',
+      outdoor: 'outdoor-v2',
+    };
+    return `https://api.maptiler.com/maps/${styleIds[style]}/style.json?key=${MAPTILER_KEY}`;
+  }
+
+  // Graceful fallback raster tiles when MapTiler API Key is not yet set
+  const geoapifyStyles: Record<MapStyleKey, string> = {
+    streets: 'osm-carto',
+    dark: 'dark-matter',
+    satellite: 'positron',
+    outdoor: 'osm-carto',
+  };
+  const tileUrl = GEOAPIFY_KEY
+    ? `https://maps.geoapify.com/v1/tile/${geoapifyStyles[style]}/{z}/{x}/{y}.png?apiKey=${GEOAPIFY_KEY}`
+    : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+  return {
+    version: 8,
+    sources: {
+      'base-tiles': {
+        type: 'raster',
+        tiles: [tileUrl],
+        tileSize: 256,
+        attribution: '&copy; MapLibre &copy; OpenStreetMap contributors',
+      },
+    },
+    layers: [
+      {
+        id: 'base-tiles-layer',
+        type: 'raster',
+        source: 'base-tiles',
+        minzoom: 0,
+        maxzoom: 19,
+      },
+    ],
+  };
+};
+
+const MAP_STYLE_NAMES: Record<MapStyleKey, string> = {
+  streets: 'Streets (MapTiler)',
+  dark: 'Dark Matter (MapTiler)',
+  satellite: 'Satellite (MapTiler)',
+  outdoor: 'Outdoor & Topo (MapTiler)',
 };
 
 const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) => {
@@ -57,6 +88,82 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
   const routes = mapData?.routes || [];
   const hasMarkers = markers.length > 0;
 
+  // Draw or update route lines on current map style
+  const drawRoutes = (map: maplibregl.Map, currentRoutes: typeof routes) => {
+    if (!map || currentRoutes.length === 0) return;
+    if (!map.isStyleLoaded()) {
+      map.once('style.load', () => drawRoutes(map, currentRoutes));
+      return;
+    }
+
+    const routeGeoJSON = {
+      type: 'FeatureCollection' as const,
+      features: currentRoutes.map((r, i) => ({
+        type: 'Feature' as const,
+        properties: { id: i, name: `${r.from_name} → ${r.to_name}` },
+        geometry: {
+          type: 'LineString' as const,
+          coordinates: [
+            [r.from_lng, r.from_lat],
+            [r.to_lng, r.to_lat],
+          ],
+        },
+      })),
+    };
+
+    const existingSource = map.getSource('flight-routes') as maplibregl.GeoJSONSource | undefined;
+    if (existingSource) {
+      existingSource.setData(routeGeoJSON);
+    } else {
+      map.addSource('flight-routes', {
+        type: 'geojson',
+        data: routeGeoJSON,
+      });
+
+      if (!map.getLayer('flight-routes-glow')) {
+        map.addLayer({
+          id: 'flight-routes-glow',
+          type: 'line',
+          source: 'flight-routes',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#6366f1',
+            'line-width': 4,
+            'line-opacity': 0.4,
+            'line-blur': 3,
+          },
+        });
+      }
+
+      if (!map.getLayer('flight-routes-core')) {
+        map.addLayer({
+          id: 'flight-routes-core',
+          type: 'line',
+          source: 'flight-routes',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#06b6d4',
+            'line-width': 2,
+            'line-dasharray': [2, 2],
+          },
+        });
+      }
+    }
+  };
+
+  // Switch Map Style
+  const handleStyleChange = (style: MapStyleKey) => {
+    setCurrentStyle(style);
+    setShowStyleMenu(false);
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    map.setStyle(getMapStyleUrl(style));
+    map.once('style.load', () => {
+      drawRoutes(map, routes);
+    });
+  };
+
   // Initialize Map
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -67,26 +174,7 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: {
-        version: 8,
-        sources: {
-          'base-tiles': {
-            type: 'raster',
-            tiles: [MAP_STYLES[currentStyle].url],
-            tileSize: 256,
-            attribution: '&copy; Geoapify &copy; OpenStreetMap contributors',
-          },
-        },
-        layers: [
-          {
-            id: 'base-tiles-layer',
-            type: 'raster',
-            source: 'base-tiles',
-            minzoom: 0,
-            maxzoom: 19,
-          },
-        ],
-      },
+      style: getMapStyleUrl(currentStyle),
       center: [centerLng, centerLat],
       zoom: zoom,
       pitch: 0,
@@ -95,6 +183,11 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
     });
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'top-right');
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+
+    map.on('load', () => {
+      drawRoutes(map, routes);
+    });
 
     mapInstanceRef.current = map;
 
@@ -105,16 +198,6 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
     };
   }, []);
 
-  // Update base tiles if style changed
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map) return;
-
-    const source = map.getSource('base-tiles') as maplibregl.RasterTileSource | undefined;
-    if (source && source.setTiles) {
-      source.setTiles([MAP_STYLES[currentStyle].url]);
-    }
-  }, [currentStyle]);
 
   // Toggle 3D Tilt
   const toggle3D = () => {
@@ -171,12 +254,12 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
       // Custom marker container
       const el = document.createElement('div');
       el.className = `premium-map-marker marker-type-${marker.marker_type || 'destination'}`;
-      
-      const icon = 
+
+      const icon =
         marker.marker_type === 'hotel' ? '🏨' :
-        marker.marker_type === 'activity' ? '📍' :
-        marker.marker_type === 'airport' ? '✈️' :
-        marker.marker_type === 'restaurant' ? '🍽️' : '🌍';
+          marker.marker_type === 'activity' ? '📍' :
+            marker.marker_type === 'airport' ? '✈️' :
+              marker.marker_type === 'restaurant' ? '🍽️' : '🌍';
 
       el.innerHTML = `
         <div class="marker-pulse-ring"></div>
@@ -207,56 +290,8 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
     });
 
     // Draw route lines if available
-    if (routes.length > 0 && map.isStyleLoaded()) {
-      const routeGeoJSON = {
-        type: 'FeatureCollection' as const,
-        features: routes.map((r, i) => ({
-          type: 'Feature' as const,
-          properties: { id: i, name: `${r.from_name} → ${r.to_name}` },
-          geometry: {
-            type: 'LineString' as const,
-            coordinates: [
-              [r.from_lng, r.from_lat],
-              [r.to_lng, r.to_lat],
-            ],
-          },
-        })),
-      };
+    drawRoutes(map, routes);
 
-      if (map.getSource('flight-routes')) {
-        (map.getSource('flight-routes') as maplibregl.GeoJSONSource).setData(routeGeoJSON);
-      } else {
-        map.addSource('flight-routes', {
-          type: 'geojson',
-          data: routeGeoJSON,
-        });
-
-        map.addLayer({
-          id: 'flight-routes-glow',
-          type: 'line',
-          source: 'flight-routes',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: {
-            'line-color': '#6366f1',
-            'line-width': 4,
-            'line-opacity': 0.4,
-            'line-blur': 3,
-          },
-        });
-
-        map.addLayer({
-          id: 'flight-routes-core',
-          type: 'line',
-          source: 'flight-routes',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: {
-            'line-color': '#06b6d4',
-            'line-width': 2,
-            'line-dasharray': [2, 2],
-          },
-        });
-      }
-    }
 
     if (!bounds.isEmpty()) {
       map.fitBounds(bounds, { padding: 80, maxZoom: 13, duration: 1200 });
@@ -321,6 +356,19 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
 
         {/* Map Control Tools */}
         <div className="map-tools">
+          {/* MapTiler status indicator */}
+          <div
+            className={`map-status-pill ${MAPTILER_KEY ? 'active' : 'fallback'}`}
+            title={
+              MAPTILER_KEY
+                ? 'MapTiler vector tiles connected'
+                : 'Using fallback tiles. Add VITE_MAPTILER_API_KEY in frontend/.env for MapTiler HD vector tiles'
+            }
+          >
+            <span className="status-dot" />
+            <span className="status-text">{MAPTILER_KEY ? 'MapTiler HD' : 'MapTiler (Key Needed)'}</span>
+          </div>
+
           <button
             className={`tool-btn ${is3D ? 'active' : ''}`}
             onClick={toggle3D}
@@ -350,16 +398,13 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
             </button>
             {showStyleMenu && (
               <div className="style-dropdown glass-strong animate-slide-up">
-                {(['dark', 'streets', 'satellite'] as MapStyleKey[]).map(style => (
+                {(['streets', 'dark', 'satellite', 'outdoor'] as MapStyleKey[]).map(style => (
                   <button
                     key={style}
                     className={`style-option ${currentStyle === style ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentStyle(style);
-                      setShowStyleMenu(false);
-                    }}
+                    onClick={() => handleStyleChange(style)}
                   >
-                    {MAP_STYLES[style].name}
+                    {MAP_STYLE_NAMES[style]}
                   </button>
                 ))}
               </div>
@@ -388,8 +433,8 @@ const MapPanel: FC<MapPanelProps> = ({ mapData, onMarkerSelect, onPromptSend }) 
           <div className="detail-card-header">
             <div className="detail-icon-wrap">
               {selectedMarker.marker_type === 'hotel' ? '🏨' :
-               selectedMarker.marker_type === 'activity' ? '📍' :
-               selectedMarker.marker_type === 'airport' ? '✈️' : '🌍'}
+                selectedMarker.marker_type === 'activity' ? '📍' :
+                  selectedMarker.marker_type === 'airport' ? '✈️' : '🌍'}
             </div>
             <div className="detail-text">
               <h4>{selectedMarker.name}</h4>

@@ -175,7 +175,8 @@ def seed_data(client):
     agent_exec_rows = []
     api_rows = []
 
-    base_time = datetime(2025, 3, 1, 10, 0, 0, tzinfo=timezone.utc)
+    # Use recent dates so BigQuery free tier doesn't drop expired partitions
+    base_time = datetime.now(timezone.utc) - timedelta(days=45)
     # Weights to make some destinations more popular than others
     # Paris, Tokyo, NY, Rome, London are highly weighted
     dest_weights = [25, 20, 15, 12, 10, 8, 5, 5, 4, 3, 2, 2, 1, 1, 1]

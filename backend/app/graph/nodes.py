@@ -16,6 +16,14 @@ from app.services.missing_information import (
 )
 from app.services.conversation_service import ConversationService
 
+# Analytics — imported lazily so missing pyodbc never crashes TravelOS
+try:
+    from app.analytics import analytics_events as _analytics
+    _ANALYTICS_OK = True
+except Exception:
+    _analytics = None
+    _ANALYTICS_OK = False
+
 
 def _format_flight_message(flights: list[dict]) -> str:
     if not flights:
@@ -77,6 +85,13 @@ class GraphNodes:
         message = state["message"]
         travel_state = state["travel_state"]
         session_id = state["session_id"]
+
+        # Analytics: track session (idempotent — get_or_create)
+        if _ANALYTICS_OK:
+            try:
+                _analytics.track_session(session_id)
+            except Exception:
+                pass
 
         for handler_fn in [
             self.handlers.handle_currency_switch,
@@ -335,6 +350,7 @@ class GraphNodes:
     # Node 5c: Orchestrator & Planning (Hotels, Activities, Itinerary, Budget)
     # -----------------------------------------------------------------------
     def orchestrator_node(self, state: AgentGraphState) -> Dict[str, Any]:
+        import time as _time
         message = state["message"]
         travel_state = state["travel_state"]
         query = state.get("query")
@@ -367,6 +383,7 @@ class GraphNodes:
         )
 
         if run_orchestration:
+            _orch_start = _time.time()
             try:
                 enrichment = self.orchestrator.orchestrate(
                     query=query, state=travel_state, live_result=live_result
@@ -391,8 +408,63 @@ class GraphNodes:
                             ChatSource(**s) if isinstance(s, dict) else s
                             for s in enrichment["research_sources"]
                         ]
+
+                # Analytics: track agent executions and searches
+                if _ANALYTICS_OK:
+                    _orch_ms = int((_time.time() - _orch_start) * 1000)
+                    try:
+                        # Track OrchestratorAgent execution
+                        _analytics.track_agent_execution(
+                            session_id, "OrchestratorAgent",
+                            duration_ms=_orch_ms, status="success"
+                        )
+                        # Track hotel search if hotels returned
+                        if enrichment.get("hotels"):
+                            dest = (travel_state.destinations[0] if travel_state.destinations
+                                    else (travel_state.cities[0] if travel_state.cities else None))
+                            _analytics.track_hotel_search(
+                                session_id,
+                                destination=dest,
+                                travelers=travel_state.travelers,
+                                results_count=len(enrichment["hotels"]),
+                                success=True
+                            )
+                        # Track place/activity search
+                        if enrichment.get("activities"):
+                            dest = (travel_state.destinations[0] if travel_state.destinations
+                                    else (travel_state.cities[0] if travel_state.cities else None))
+                            _analytics.track_place_search(
+                                session_id,
+                                destination=dest,
+                                category="activities",
+                                results_count=len(enrichment["activities"]),
+                                success=True
+                            )
+                        # Track itinerary generation
+                        if enrichment.get("itinerary"):
+                            dest = (travel_state.destinations[0] if travel_state.destinations
+                                    else (travel_state.cities[0] if travel_state.cities else None))
+                            _analytics.track_itinerary(
+                                session_id,
+                                destination=dest,
+                                duration_days=travel_state.duration_days,
+                                activity_count=len(travel_state.activities or []),
+                                generation_time_ms=_orch_ms
+                            )
+                    except Exception:
+                        pass
+
             except Exception as e:
                 print(f"[LangGraph:OrchestratorNode] Error: {e}")
+                # Analytics: track orchestrator error
+                if _ANALYTICS_OK:
+                    try:
+                        _analytics.track_agent_execution(
+                            session_id, "OrchestratorAgent",
+                            status="failed", error_type=type(e).__name__
+                        )
+                    except Exception:
+                        pass
 
         # Budget Feasibility & Auto-Replanning
         if enrichment.get("budget") and enrichment["budget"].remaining is not None and enrichment["budget"].remaining < 0:
@@ -524,6 +596,19 @@ class GraphNodes:
 
         # 5. Save assistant reply in session history
         self.session_manager.add_message(session_id, "assistant", reply_message)
+
+        # Analytics: track chat message (no content stored — metadata only)
+        if _ANALYTICS_OK:
+            try:
+                _analytics.track_chat(
+                    session_id,
+                    role="user",
+                    message_length=len(message),
+                    intent=getattr(state.get("query"), "query_type", None),
+                    response_type=route,
+                )
+            except Exception:
+                pass
 
         # 6. Build map data
         map_data = enrichment.get("map_data") if enrichment else None

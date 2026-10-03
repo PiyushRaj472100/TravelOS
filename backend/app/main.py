@@ -13,6 +13,27 @@ app = FastAPI(
 async def healthz():
     return {"status": "ok"}
 
+
+@app.get("/api/analytics/status")
+async def analytics_status():
+    try:
+        from app.analytics.analytics_connection import is_available
+        from app.analytics.analytics_config import AnalyticsConfig
+        return {
+            "enabled": AnalyticsConfig.ANALYTICS_ENABLED,
+            "configured": AnalyticsConfig.is_configured(),
+            "connected": is_available(),
+            "database": AnalyticsConfig.SQL_SERVER_DATABASE,
+            "host": AnalyticsConfig.SQL_SERVER_HOST,
+        }
+    except Exception as exc:
+        return {
+            "enabled": False,
+            "connected": False,
+            "error": str(exc),
+        }
+
+
 # =============================================
 # CORS — allow frontend dev server + production
 # =============================================
